@@ -6,7 +6,7 @@ package com.mycompany.pp2;
 
 
 
-public class Cuidad {
+public class Ciudad {
 
     // Atributos privados
     private String pais;
@@ -23,11 +23,11 @@ public class Cuidad {
     }
 
     // Constructor vacío
-    public Cuidad() {
+    public Ciudad() {
     }
 
     // Constructor con parámetros
-    public Cuidad(String pais, String estado, String cuidad, TipoEscenario escenario) {
+    public Ciudad(String pais, String estado, String cuidad, TipoEscenario escenario) {
         this.pais = pais;
         this.estado = estado;
         this.cuidad = cuidad;

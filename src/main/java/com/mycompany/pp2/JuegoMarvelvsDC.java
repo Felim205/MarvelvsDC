@@ -12,7 +12,7 @@ public class JuegoMarvelvsDC {
     private String nombreJuego;
     private Collection<Usuario> usuarios;
     private Collection<Persona> personajes;
-    private Collection<Cuidad> ciudades;
+    private Collection<Ciudad> ciudades;
 
     // Constructor vacío
     public JuegoMarvelvsDC() {
@@ -55,11 +55,11 @@ public class JuegoMarvelvsDC {
         this.personajes = personajes;
     }
 
-    public Collection<Cuidad> getCiudades() {
+    public Collection<Ciudad> getCiudades() {
         return ciudades;
     }
 
-    public void setCiudades(Collection<Cuidad> ciudades) {
+    public void setCiudades(Collection<Ciudad> ciudades) {
         this.ciudades = ciudades;
     }
 
@@ -121,7 +121,7 @@ public class JuegoMarvelvsDC {
     }
 
     // Métodos para Ciudades
-    public void cargarCiudad(Cuidad ciudad) {
+    public void cargarCiudad(Ciudad ciudad) {
         if (ciudad != null && !ciudades.contains(ciudad)) {
             ciudades.add(ciudad);
             System.out.println("Ciudad cargada: " + ciudad);
@@ -130,7 +130,7 @@ public class JuegoMarvelvsDC {
         }
     }
 
-    public void editarCiudad(Cuidad ciudad, String nuevoEstado, String nuevoPais) {
+    public void editarCiudad(Ciudad ciudad, String nuevoEstado, String nuevoPais) {
         if (ciudades.contains(ciudad)) {
             ciudad.setEstado(nuevoEstado);
             ciudad.setPais(nuevoPais);
@@ -140,7 +140,7 @@ public class JuegoMarvelvsDC {
         }
     }
 
-    public void agregarCiudad(Cuidad ciudad) {
+    public void agregarCiudad(Ciudad ciudad) {
         if (ciudad != null && !ciudades.contains(ciudad)) {
             ciudades.add(ciudad);
             System.out.println("Ciudad agregada: " + ciudad);
@@ -149,7 +149,7 @@ public class JuegoMarvelvsDC {
         }
     }
 
-    public void guardarCiudad(Cuidad ciudad) {
+    public void guardarCiudad(Ciudad ciudad) {
         if (!ciudades.contains(ciudad)) {
             ciudades.add(ciudad);
             System.out.println("Ciudad guardada: " + ciudad);
