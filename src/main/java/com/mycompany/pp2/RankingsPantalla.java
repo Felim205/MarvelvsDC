@@ -29,6 +29,8 @@ public class RankingsPantalla extends PantallaMadreMenues {
     private void personalizarPantalla() {
         // Cambiar el título de la ventana
         setTitle("Rankings - MARVEL VS DC");
+        // Ocultar botones no relevantes
+        RankingsBtn.setVisible(false);
 
     }
     
@@ -68,7 +70,7 @@ public class RankingsPantalla extends PantallaMadreMenues {
                 ActualizarActionPerformed(evt);
             }
         });
-        getContentPane().add(Actualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 490, 170, 40));
+        getContentPane().add(Actualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 490, 170, 40));
 
         EliminarBtn.setText("Exportar");
         EliminarBtn.setToolTipText("");
@@ -77,7 +79,7 @@ public class RankingsPantalla extends PantallaMadreMenues {
                 EliminarBtnActionPerformed(evt);
             }
         });
-        getContentPane().add(EliminarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 490, 170, 40));
+        getContentPane().add(EliminarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 490, 170, 40));
 
         ListaRankings.setBackground(new java.awt.Color(212, 223, 241));
         ListaRankings.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -95,7 +97,7 @@ public class RankingsPantalla extends PantallaMadreMenues {
         ));
         jScrollPane1.setViewportView(ListaRankings);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 100, 760, 380));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 760, 380));
 
         Background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/BgRankings.png"))); // NOI18N
         getContentPane().add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 920, 550));

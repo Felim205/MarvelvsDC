@@ -18,6 +18,8 @@ public class PartidaPantalla extends PantallaMadreMenues {
     private void personalizarPantalla() {
         // Cambiar el título de la ventana
         setTitle("Comenzar Partida - MARVEL VS DC");
+        // Ocultar botones no relevantes
+        PartidaBtn.setVisible(false);
 
     }
     

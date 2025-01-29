@@ -28,6 +28,8 @@ public class CiudadPantalla extends PantallaMadreMenues {
     private void personalizarPantalla() {
         // Cambiar el título de la ventana
         setTitle("Mis Ciudades - MARVEL VS DC");
+        // Ocultar botones no relevantes
+        CiudadesBtn.setVisible(false);
     }
     
     public void poblarLaTablaCiudad(){
@@ -98,7 +100,7 @@ public class CiudadPantalla extends PantallaMadreMenues {
         ));
         jScrollPane1.setViewportView(ListaCiudades);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 100, 760, 360));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 760, 360));
 
         AgregarBtn.setText("Agregar");
         AgregarBtn.setToolTipText("");
@@ -107,7 +109,7 @@ public class CiudadPantalla extends PantallaMadreMenues {
                 AgregarBtnActionPerformed(evt);
             }
         });
-        getContentPane().add(AgregarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 480, 170, 40));
+        getContentPane().add(AgregarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 480, 170, 40));
 
         EditarBtn.setText("Editar");
         EditarBtn.setToolTipText("");
@@ -116,7 +118,7 @@ public class CiudadPantalla extends PantallaMadreMenues {
                 EditarBtnActionPerformed(evt);
             }
         });
-        getContentPane().add(EditarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 480, 170, 40));
+        getContentPane().add(EditarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 480, 170, 40));
 
         EliminarBtn.setText("Eliminar");
         EliminarBtn.setToolTipText("");

@@ -29,6 +29,8 @@ public class UsuariosPantalla extends PantallaMadreMenues {
     private void personalizarPantalla() {
         // Cambiar el título de la ventana
         setTitle("Usuarios - MARVEL VS DC");
+        // Ocultar botones no relevantes
+        UsuariosBtn.setVisible(false);
 
     }
     
@@ -69,7 +71,7 @@ public class UsuariosPantalla extends PantallaMadreMenues {
                 AgregarBtnActionPerformed(evt);
             }
         });
-        getContentPane().add(AgregarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 480, 170, 40));
+        getContentPane().add(AgregarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 480, 170, 40));
 
         EditarBtn.setText("Editar");
         EditarBtn.setToolTipText("");
@@ -78,7 +80,7 @@ public class UsuariosPantalla extends PantallaMadreMenues {
                 EditarBtnActionPerformed(evt);
             }
         });
-        getContentPane().add(EditarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 480, 170, 40));
+        getContentPane().add(EditarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 480, 170, 40));
 
         EliminarBtn.setText("Eliminar");
         EliminarBtn.setToolTipText("");
@@ -105,7 +107,7 @@ public class UsuariosPantalla extends PantallaMadreMenues {
         ));
         jScrollPane1.setViewportView(ListaUsuarios);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 100, 760, 360));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 760, 360));
 
         Background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/BgUser.png"))); // NOI18N
         getContentPane().add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 920, 550));

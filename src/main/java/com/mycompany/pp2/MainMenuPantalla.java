@@ -19,6 +19,8 @@ public class MainMenuPantalla extends PantallaMadreMenues {
         // Cambiar el título de la ventana
         setTitle("Menú Principal - MARVEL VS DC");
         
+        // Ocultar botones no relevantes
+        MainMenuBtn.setVisible(false);
     }
     
     /**
