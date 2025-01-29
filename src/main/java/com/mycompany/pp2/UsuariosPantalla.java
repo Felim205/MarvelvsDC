@@ -1,12 +1,8 @@
 package com.mycompany.pp2;
 
-import com.mycompany.pp2.CiudadPantalla.Pais;
+import com.mycompany.pp2.managers.UsuarioManager;
+import javax.swing.*;
 import java.awt.GridLayout;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -34,11 +30,18 @@ public class UsuariosPantalla extends PantallaMadreMenues {
 
     }
     
-    public void poblarLaTablaUsuarios(){
-        String columns [] = {"ID", "Nombre", "Correo", "Rol"};
-        String data [] [] = {{"001","GaBruhBaVi","gabruhbavi@outlook.com","DPS"}};    
-        DefaultTableModel model = new DefaultTableModel (data, columns);
-        ListaUsuarios. setModel (model);
+    public void poblarLaTablaUsuarios() {
+        DefaultTableModel model = (DefaultTableModel) ListaUsuarios.getModel();
+        model.setRowCount(0);
+
+        for (Usuario usuario : UsuarioManager.getListaUsuarios()) {
+            model.addRow(new Object[]{
+                usuario.getUserName(),
+                usuario.getNombre() + " " + usuario.getApellidos(),
+                usuario.getCorreo(),
+                "Usuario" // Placeholder para roles
+            });
+        }
     }
     
     /**
@@ -102,7 +105,7 @@ public class UsuariosPantalla extends PantallaMadreMenues {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Username", "Nombre Completo", "Correo", "Rol"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -114,6 +117,10 @@ public class UsuariosPantalla extends PantallaMadreMenues {
             }
         });
         jScrollPane1.setViewportView(ListaUsuarios);
+        if (ListaUsuarios.getColumnModel().getColumnCount() > 0) {
+            ListaUsuarios.getColumnModel().getColumn(3).setMinWidth(70);
+            ListaUsuarios.getColumnModel().getColumn(3).setPreferredWidth(70);
+        }
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 770, 360));
 
@@ -124,128 +131,127 @@ public class UsuariosPantalla extends PantallaMadreMenues {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AgregarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarBtnActionPerformed
+        JTextField txtNombre = new JTextField(15);
+        JTextField txtApellidos = new JTextField(15);
+        JTextField txtUserName = new JTextField(15);
+        JTextField txtCorreo = new JTextField(15);
+        JPasswordField txtContraseña = new JPasswordField(15);
+
+        JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
+        panel.add(new JLabel("Nombre:"));
+        panel.add(txtNombre);
+        panel.add(new JLabel("Apellidos:"));
+        panel.add(txtApellidos);
+        panel.add(new JLabel("Username:"));
+        panel.add(txtUserName);
+        panel.add(new JLabel("Correo:"));
+        panel.add(txtCorreo);
+        panel.add(new JLabel("Contraseña:"));
+        panel.add(txtContraseña);
+
         boolean datosValidos = false;
-
-        JTextField txtNombreCiudad = new JTextField(15);
-        JComboBox<String> comboPais = new JComboBox<>();
-        JTextField txtPoblacion = new JTextField(10);
-        JTextField txtCoordenadas = new JTextField(15);
-
-        // Llenar el ComboBox con los valores del enum
-        for (Pais pais : Pais.values()) {
-            comboPais.addItem(pais.getNombre());
-        }
-
-        do {
-            JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
-            panel.add(new JLabel("Nombre de la Ciudad:"));
-            panel.add(txtNombreCiudad);
-            panel.add(new JLabel("País:"));
-            panel.add(comboPais);
-            panel.add(new JLabel("Población:"));
-            panel.add(txtPoblacion);
-            panel.add(new JLabel("Coordenadas:"));
-            panel.add(txtCoordenadas);
-
-            int result = JOptionPane.showConfirmDialog(this, panel, "Agregar Ciudad", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-            if (result == JOptionPane.OK_OPTION) {
-                String nombre = txtNombreCiudad.getText().trim();
-                String pais = (String) comboPais.getSelectedItem();
-                String poblacion = txtPoblacion.getText().trim();
-                String coordenadas = txtCoordenadas.getText().trim();
-
-                // Validaciones aquí (similar al código previo)
-                // ...
-
-                DefaultTableModel model = (DefaultTableModel) ListaUsuarios.getModel();
-                model.addRow(new Object[]{nombre, pais, poblacion, coordenadas});
-                datosValidos = true;
-            } else {
-                datosValidos = true; // Cerrar si el usuario cancela
+        while (!datosValidos) {
+            int result = JOptionPane.showConfirmDialog(this, panel, "Agregar Usuario", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            if (result != JOptionPane.OK_OPTION) {
+                return; // Cierra si se cancela sin borrar datos
             }
-        } while (!datosValidos);
+
+            String nombre = txtNombre.getText().trim();
+            String apellidos = txtApellidos.getText().trim();
+            String userName = txtUserName.getText().trim();
+            String correo = txtCorreo.getText().trim();
+            String contraseña = new String(txtContraseña.getPassword());
+
+            // Validaciones heredadas
+            if (!validarTexto(nombre, 2, 30) || !validarTexto(apellidos, 2, 30)) {
+                JOptionPane.showMessageDialog(this, "El nombre y apellidos deben tener entre 2 y 30 caracteres y solo contener letras.", "Error", JOptionPane.ERROR_MESSAGE);
+                continue;
+            }
+            if (!validarCorreo(correo)) {
+                JOptionPane.showMessageDialog(this, "Ingrese un correo válido (ejemplo@dominio.com).", "Error", JOptionPane.ERROR_MESSAGE);
+                continue;
+            }
+            if (userName.length() < 5) {
+                JOptionPane.showMessageDialog(this, "El username debe tener al menos 5 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
+                continue;
+            }
+            if (contraseña.length() < 8) {
+                JOptionPane.showMessageDialog(this, "La contraseña debe tener al menos 8 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
+                continue;
+            }
+
+            // Crear usuario y agregarlo
+            Usuario nuevoUsuario = new Usuario(nombre, apellidos, userName, correo, contraseña);
+            UsuarioManager.agregarUsuario(nuevoUsuario);
+            poblarLaTablaUsuarios();
+            datosValidos = true;
+        }
     }//GEN-LAST:event_AgregarBtnActionPerformed
 
     private void EditarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditarBtnActionPerformed
         int filaSeleccionada = ListaUsuarios.getSelectedRow();
         if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione una fila para editar.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Seleccione un usuario para editar.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        DefaultTableModel model = (DefaultTableModel) ListaUsuarios.getModel();
-        String nombreActual = model.getValueAt(filaSeleccionada, 0).toString();
-        String paisActual = model.getValueAt(filaSeleccionada, 1).toString();
-        String poblacionActual = model.getValueAt(filaSeleccionada, 2).toString();
-        String coordenadasActual = model.getValueAt(filaSeleccionada, 3).toString();
+        Usuario usuario = UsuarioManager.getListaUsuarios().get(filaSeleccionada);
 
-        JTextField txtNombreCiudad = new JTextField(nombreActual, 15);
-        JComboBox<String> comboPais = new JComboBox<>();
-        JTextField txtPoblacion = new JTextField(poblacionActual, 10);
-        JTextField txtCoordenadas = new JTextField(coordenadasActual, 15);
-
-        // Llenar el ComboBox con los valores del enum
-        for (Pais pais : Pais.values()) {
-            comboPais.addItem(pais.getNombre());
-        }
-        // Seleccionar el país actual
-        comboPais.setSelectedItem(paisActual);
+        JTextField txtNombre = new JTextField(usuario.getNombre(), 15);
+        JTextField txtApellidos = new JTextField(usuario.getApellidos(), 15);
+        JTextField txtUserName = new JTextField(usuario.getUserName(), 15);
+        JTextField txtCorreo = new JTextField(usuario.getCorreo(), 15);
+        JPasswordField txtContraseña = new JPasswordField(usuario.getContraseña(), 15);
 
         JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
-        panel.add(new JLabel("Nombre de la Ciudad:"));
-        panel.add(txtNombreCiudad);
-        panel.add(new JLabel("País:"));
-        panel.add(comboPais);
-        panel.add(new JLabel("Población:"));
-        panel.add(txtPoblacion);
-        panel.add(new JLabel("Coordenadas:"));
-        panel.add(txtCoordenadas);
+        panel.add(new JLabel("Nombre:"));
+        panel.add(txtNombre);
+        panel.add(new JLabel("Apellidos:"));
+        panel.add(txtApellidos);
+        panel.add(new JLabel("Username:"));
+        panel.add(txtUserName);
+        panel.add(new JLabel("Correo:"));
+        panel.add(txtCorreo);
+        panel.add(new JLabel("Contraseña:"));
+        panel.add(txtContraseña);
 
-        int result = JOptionPane.showConfirmDialog(this, panel, "Editar Ciudad", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        int result = JOptionPane.showConfirmDialog(this, panel, "Editar Usuario", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
-            String nuevoNombre = txtNombreCiudad.getText().trim();
-            String nuevoPais = (String) comboPais.getSelectedItem();
-            String nuevaPoblacion = txtPoblacion.getText().trim();
-            String nuevasCoordenadas = txtCoordenadas.getText().trim();
+            try {
+                usuario.setNombre(txtNombre.getText().trim());
+                usuario.setApellidos(txtApellidos.getText().trim());
+                usuario.setUserName(txtUserName.getText().trim());
+                usuario.setCorreo(txtCorreo.getText().trim());
+                usuario.setContraseña(new String(txtContraseña.getPassword()));
 
-            // Validaciones aquí (similar al código previo)
-            // ...
-
-            model.setValueAt(nuevoNombre, filaSeleccionada, 0);
-            model.setValueAt(nuevoPais, filaSeleccionada, 1);
-            model.setValueAt(nuevaPoblacion, filaSeleccionada, 2);
-            model.setValueAt(nuevasCoordenadas, filaSeleccionada, 3);
-
-            JOptionPane.showMessageDialog(this, "Ciudad actualizada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                UsuarioManager.editarUsuario(filaSeleccionada, usuario);
+                poblarLaTablaUsuarios();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_EditarBtnActionPerformed
 
     private void EliminarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarBtnActionPerformed
-        // Verificar si hay una fila seleccionada
         int filaSeleccionada = ListaUsuarios.getSelectedRow();
         if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione una fila para eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Seleccione un usuario para eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Confirmar la eliminación con el usuario
         int confirmacion = JOptionPane.showConfirmDialog(
             this,
-            "¿Está seguro de que desea eliminar esta ciudad?",
+            "¿Está seguro de que desea eliminar este usuario?",
             "Confirmar Eliminación",
             JOptionPane.YES_NO_OPTION,
             JOptionPane.WARNING_MESSAGE
         );
 
         if (confirmacion == JOptionPane.YES_OPTION) {
-            // Eliminar la fila del modelo de la tabla
-            DefaultTableModel model = (DefaultTableModel) ListaUsuarios.getModel();
-            model.removeRow(filaSeleccionada);
-
-            // Mensaje de confirmación
-            JOptionPane.showMessageDialog(this, "Ciudad eliminada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            UsuarioManager.eliminarUsuario(filaSeleccionada);
+            poblarLaTablaUsuarios();
+            JOptionPane.showMessageDialog(this, "Usuario eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_EliminarBtnActionPerformed
 

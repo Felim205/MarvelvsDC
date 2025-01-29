@@ -107,8 +107,8 @@ public class PantallaMadreMenues extends PantallaMadre {
      * Valida si un correo electrónico tiene el formato correcto.
      */
     protected boolean validarCorreo(String correo) {
-        String patronCorreo = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
-        return correo != null && Pattern.matches(patronCorreo, correo);
+        String regexCorreo = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
+        return correo != null && Pattern.matches(regexCorreo, correo);
     }
 
     /**
