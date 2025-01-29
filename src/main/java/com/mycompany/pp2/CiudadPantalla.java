@@ -1,20 +1,21 @@
 package com.mycompany.pp2;
 
-import java.awt.GridLayout;
-import javax.swing.BoxLayout;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import com.mycompany.pp2.Ciudad;
+import com.mycompany.pp2.Ciudad.TipoEscenario;
+import com.mycompany.pp2.managers.CiudadManager;
+
+
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 /**
  *
  * @author gabob
+ * Pantalla de gestión de ciudades en MARVEL VS DC.
  */
 public class CiudadPantalla extends PantallaMadreMenues {
-
+ 
     /**
      * Constructor de PantallaMadreMenues
      */
@@ -32,13 +33,16 @@ public class CiudadPantalla extends PantallaMadreMenues {
         CiudadesBtn.setVisible(false);
     }
     
-    public void poblarLaTablaCiudad(){
-        String columns [] = {"Nombre", "País", "Población", "Coordenadas"};
-        String data [] [] = {{"Grecia","Costa Rica","3000","20305"},
-            {"Heredia","Costa Rica","6000","21569"},
-            {"Cartago","Costa Rica","2000","El infierno legal"}};     
-        DefaultTableModel model = new DefaultTableModel (data, columns);
-        ListaCiudades. setModel (model);
+    /**
+     * Poblar la tabla sin perder información previamente ingresada.
+     */
+    public void poblarLaTablaCiudad() {
+        DefaultTableModel model = (DefaultTableModel) ListaCiudades.getModel();
+        model.setRowCount(0); // Limpiar la tabla visualmente, pero mantener los datos en CiudadManager
+        
+        for (Ciudad ciudad : CiudadManager.getListaCiudades()) {
+            model.addRow(new Object[]{ciudad.getCuidad(), ciudad.getPais(), ciudad.getEstado(), ciudad.getEscenario().getNombre()});
+        }
     }
     
     public enum Pais {
@@ -95,9 +99,17 @@ public class CiudadPantalla extends PantallaMadreMenues {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Nombre", "País", "Estado / Provincia", "Escenario"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(ListaCiudades);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 760, 360));
@@ -137,51 +149,61 @@ public class CiudadPantalla extends PantallaMadreMenues {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Agregar una nueva ciudad ingresada por el usuario.
+     */
     private void AgregarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarBtnActionPerformed
-        boolean datosValidos = false;
-
         JTextField txtNombreCiudad = new JTextField(15);
         JComboBox<String> comboPais = new JComboBox<>();
-        JTextField txtPoblacion = new JTextField(10);
-        JTextField txtCoordenadas = new JTextField(15);
+        JTextField txtEstado = new JTextField(15);
+        JComboBox<String> comboEscenario = new JComboBox<>();
 
-        // Llenar el ComboBox con los valores del enum
         for (Pais pais : Pais.values()) {
             comboPais.addItem(pais.getNombre());
         }
 
-        do {
-            JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
-            panel.add(new JLabel("Nombre de la Ciudad:"));
-            panel.add(txtNombreCiudad);
-            panel.add(new JLabel("País:"));
-            panel.add(comboPais);
-            panel.add(new JLabel("Población:"));
-            panel.add(txtPoblacion);
-            panel.add(new JLabel("Coordenadas:"));
-            panel.add(txtCoordenadas);
+        // Agregar escenarios con nombres formateados
+        for (TipoEscenario escenario : TipoEscenario.values()) {
+            comboEscenario.addItem(escenario.getNombre());
+        }
 
-            int result = JOptionPane.showConfirmDialog(this, panel, "Agregar Ciudad", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
+        panel.add(new JLabel("Nombre de la Ciudad:"));
+        panel.add(txtNombreCiudad);
+        panel.add(new JLabel("País:"));
+        panel.add(comboPais);
+        panel.add(new JLabel("Estado/Provincia:"));
+        panel.add(txtEstado);
+        panel.add(new JLabel("Escenario:"));
+        panel.add(comboEscenario);
 
-            if (result == JOptionPane.OK_OPTION) {
-                String nombre = txtNombreCiudad.getText().trim();
-                String pais = (String) comboPais.getSelectedItem();
-                String poblacion = txtPoblacion.getText().trim();
-                String coordenadas = txtCoordenadas.getText().trim();
+        int result = JOptionPane.showConfirmDialog(this, panel, "Agregar Ciudad", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-                // Validaciones aquí (similar al código previo)
-                // ...
+        if (result == JOptionPane.OK_OPTION) {
+            String nombre = txtNombreCiudad.getText().trim();
+            String pais = (String) comboPais.getSelectedItem();
+            String estado = txtEstado.getText().trim();
+            String escenarioNombre = (String) comboEscenario.getSelectedItem();
 
-                DefaultTableModel model = (DefaultTableModel) ListaCiudades.getModel();
-                model.addRow(new Object[]{nombre, pais, poblacion, coordenadas});
-                datosValidos = true;
-            } else {
-                datosValidos = true; // Cerrar si el usuario cancela
+            // Convertir el nombre seleccionado a su respectivo enum
+            TipoEscenario escenario = null;
+            for (TipoEscenario tipo : TipoEscenario.values()) {
+                if (tipo.getNombre().equals(escenarioNombre)) {
+                    escenario = tipo;
+                    break;
+                }
             }
-        } while (!datosValidos);
-    }//GEN-LAST:event_AgregarBtnActionPerformed
 
+            Ciudad nuevaCiudad = new Ciudad(pais, estado, nombre, escenario);
+            CiudadManager.agregarCiudad(nuevaCiudad);
+            poblarLaTablaCiudad();
+        }
+    }//GEN-LAST:event_AgregarBtnActionPerformed
+    
+    /**
+     * Editar una ciudad seleccionada.
+     */
     private void EditarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditarBtnActionPerformed
         int filaSeleccionada = ListaCiudades.getSelectedRow();
         if (filaSeleccionada == -1) {
@@ -189,77 +211,69 @@ public class CiudadPantalla extends PantallaMadreMenues {
             return;
         }
 
-        DefaultTableModel model = (DefaultTableModel) ListaCiudades.getModel();
-        String nombreActual = model.getValueAt(filaSeleccionada, 0).toString();
-        String paisActual = model.getValueAt(filaSeleccionada, 1).toString();
-        String poblacionActual = model.getValueAt(filaSeleccionada, 2).toString();
-        String coordenadasActual = model.getValueAt(filaSeleccionada, 3).toString();
+        Ciudad ciudadSeleccionada = CiudadManager.getListaCiudades().get(filaSeleccionada);
 
-        JTextField txtNombreCiudad = new JTextField(nombreActual, 15);
+        JTextField txtNombreCiudad = new JTextField(ciudadSeleccionada.getCuidad(), 15);
         JComboBox<String> comboPais = new JComboBox<>();
-        JTextField txtPoblacion = new JTextField(poblacionActual, 10);
-        JTextField txtCoordenadas = new JTextField(coordenadasActual, 15);
+        JTextField txtEstado = new JTextField(ciudadSeleccionada.getEstado(), 15);
+        JComboBox<String> comboEscenario = new JComboBox<>();
 
-        // Llenar el ComboBox con los valores del enum
         for (Pais pais : Pais.values()) {
             comboPais.addItem(pais.getNombre());
         }
-        // Seleccionar el país actual
-        comboPais.setSelectedItem(paisActual);
+        comboPais.setSelectedItem(ciudadSeleccionada.getPais());
+
+        // Agregar escenarios con nombres formateados
+        for (TipoEscenario escenario : TipoEscenario.values()) {
+            comboEscenario.addItem(escenario.getNombre());
+        }
+        comboEscenario.setSelectedItem(ciudadSeleccionada.getEscenario().getNombre());
 
         JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
         panel.add(new JLabel("Nombre de la Ciudad:"));
         panel.add(txtNombreCiudad);
         panel.add(new JLabel("País:"));
         panel.add(comboPais);
-        panel.add(new JLabel("Población:"));
-        panel.add(txtPoblacion);
-        panel.add(new JLabel("Coordenadas:"));
-        panel.add(txtCoordenadas);
+        panel.add(new JLabel("Estado/Provincia:"));
+        panel.add(txtEstado);
+        panel.add(new JLabel("Escenario:"));
+        panel.add(comboEscenario);
 
         int result = JOptionPane.showConfirmDialog(this, panel, "Editar Ciudad", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
-            String nuevoNombre = txtNombreCiudad.getText().trim();
-            String nuevoPais = (String) comboPais.getSelectedItem();
-            String nuevaPoblacion = txtPoblacion.getText().trim();
-            String nuevasCoordenadas = txtCoordenadas.getText().trim();
+            ciudadSeleccionada.setCuidad(txtNombreCiudad.getText().trim());
+            ciudadSeleccionada.setPais((String) comboPais.getSelectedItem());
+            ciudadSeleccionada.setEstado(txtEstado.getText().trim());
 
-            // Validaciones aquí (similar al código previo)
-            // ...
+            // Convertir el nombre seleccionado a su respectivo enum
+            String escenarioNombre = (String) comboEscenario.getSelectedItem();
+            for (TipoEscenario tipo : TipoEscenario.values()) {
+                if (tipo.getNombre().equals(escenarioNombre)) {
+                    ciudadSeleccionada.setEscenario(tipo);
+                    break;
+                }
+            }
 
-            model.setValueAt(nuevoNombre, filaSeleccionada, 0);
-            model.setValueAt(nuevoPais, filaSeleccionada, 1);
-            model.setValueAt(nuevaPoblacion, filaSeleccionada, 2);
-            model.setValueAt(nuevasCoordenadas, filaSeleccionada, 3);
-
-            JOptionPane.showMessageDialog(this, "Ciudad actualizada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            CiudadManager.editarCiudad(filaSeleccionada, ciudadSeleccionada);
+            poblarLaTablaCiudad();
         }
     }//GEN-LAST:event_EditarBtnActionPerformed
-
+    
+    /**
+     * Eliminar una ciudad seleccionada.
+     */
     private void EliminarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarBtnActionPerformed
-        // Verificar si hay una fila seleccionada
         int filaSeleccionada = ListaCiudades.getSelectedRow();
         if (filaSeleccionada == -1) {
             JOptionPane.showMessageDialog(this, "Seleccione una fila para eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Confirmar la eliminación con el usuario
-        int confirmacion = JOptionPane.showConfirmDialog(
-            this,
-            "¿Está seguro de que desea eliminar esta ciudad?",
-            "Confirmar Eliminación",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.WARNING_MESSAGE
-        );
-
+        int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro de que desea eliminar esta ciudad?", "Confirmar Eliminación", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
         if (confirmacion == JOptionPane.YES_OPTION) {
-            // Eliminar la fila del modelo de la tabla
-            DefaultTableModel model = (DefaultTableModel) ListaCiudades.getModel();
-            model.removeRow(filaSeleccionada);
-
-            // Mensaje de confirmación
+            CiudadManager.eliminarCiudad(filaSeleccionada);
+            poblarLaTablaCiudad();
             JOptionPane.showMessageDialog(this, "Ciudad eliminada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_EliminarBtnActionPerformed

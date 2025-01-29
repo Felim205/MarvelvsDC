@@ -14,14 +14,24 @@ public class Ciudad {
     private String cuidad;
     private TipoEscenario escenario;
     
-    // Enumeración para TipoEscenario
+    // Enumeración para TipoEscenario    
     public enum TipoEscenario {
-        CUIDAD,
-        BOSQUE,
-        MONTAÑA,
-        DESIERTO
-    }
+        CIUDAD("Ciudad"),
+        BOSQUE("Bosque"),
+        MONTAÑA("Montaña"),
+        DESIERTO("Desierto");
 
+        private final String nombre;
+
+        TipoEscenario(String nombre) {
+            this.nombre = nombre;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+    }
+    
     // Constructor vacío
     public Ciudad() {
     }
