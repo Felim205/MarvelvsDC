@@ -24,23 +24,54 @@ public class Personaje extends Persona {
     
     // Enumeración para Tipo de Personaje
     public enum TipoPersonaje {
-        HEROE,
-        ANTIHEROE,
-        VILLANO
+        HEROE("Héroe"),
+        ANTIHEROE("Anti-Héroe"),
+        VILLANO("Villano");
+
+        private final String nombre;
+
+        TipoPersonaje(String nombre) {
+            this.nombre = nombre;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
     }
 
-    // Enumeración para el Origen del Personaje
+     // Enumeración para el Origen del Personaje
     public enum TipoOrigen {
-        ALIENIGENA,
-        MUTANTE,
-        META_HUMANO
+        ALIENIGENA("Alienígena"),
+        MUTANTE("Mutante"),
+        META_HUMANO("Meta-Humano");
+
+        private final String nombre;
+
+        TipoOrigen(String nombre) {
+            this.nombre = nombre;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
     }
+
 
     // Enumeración para la Franquicia
     public enum TipoFranquicia {
-        MARVEL,
-        DC,
-        NINGUNA
+        MARVEL("Marvel"),
+        DC("DC"),
+        NINGUNA("Ninguna");
+
+        private final String nombre;
+
+        TipoFranquicia(String nombre) {
+            this.nombre = nombre;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
     }
 
     // Constructor vacío

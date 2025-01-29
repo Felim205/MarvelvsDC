@@ -1,13 +1,10 @@
 package com.mycompany.pp2;
 
-import com.mycompany.pp2.CiudadPantalla.Pais;
+import com.mycompany.pp2.managers.PersonajeManager;
 import java.awt.GridLayout;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.util.Date;
 
 /**
  *
@@ -32,12 +29,26 @@ public class PersonajesPantalla extends PantallaMadreMenues {
         PersonajesBtn.setVisible(false);
     }
     
-    public void poblarLaTablaPersonajes(){
-        String columns [] = {"Nombre", "Tipo", "Nivel", "Habilidades"};
-        String data [] [] = {{"Adam Warlock (The GOAT)","Healer","23","BORN AGAIN!!!"}};    
-        DefaultTableModel model = new DefaultTableModel (data, columns);
-        ListaPersonajes. setModel (model);
+    public void poblarLaTablaPersonajes() {
+    DefaultTableModel model = (DefaultTableModel) ListaPersonajes.getModel();
+    model.setRowCount(0); // Limpia las filas actuales de la tabla
+
+    // Rellenar la tabla con los datos de PersonajeManager
+    for (Personaje personaje : PersonajeManager.getListaPersonajes()) {
+        model.addRow(new Object[]{
+            personaje.getNombre(),
+            personaje.getPseudonimo(),
+            personaje.getPersonaje().toString(),
+            personaje.getOrigen().toString(),
+            personaje.getFranquicia().toString(),
+            personaje.getFuerza(),
+            personaje.getVelocidad(),
+            personaje.getInteligencia(),
+            personaje.getRecursosEconomicos(),
+            personaje.poderTotal()
+        });
     }
+}
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -94,18 +105,48 @@ public class PersonajesPantalla extends PantallaMadreMenues {
         ListaPersonajes.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 12)); // NOI18N
         ListaPersonajes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Nombre", "Pseudónimo", "Tipo", "Origen", "Franquicia", "Fuerza", "Velocidad", "Inteligencia", "R. Económicos", "Poder Total"
             }
-        ));
-        jScrollPane1.setViewportView(ListaPersonajes);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false
+            };
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 760, 360));
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(ListaPersonajes);
+        if (ListaPersonajes.getColumnModel().getColumnCount() > 0) {
+            ListaPersonajes.getColumnModel().getColumn(0).setMinWidth(80);
+            ListaPersonajes.getColumnModel().getColumn(0).setPreferredWidth(80);
+            ListaPersonajes.getColumnModel().getColumn(1).setMinWidth(95);
+            ListaPersonajes.getColumnModel().getColumn(1).setPreferredWidth(95);
+            ListaPersonajes.getColumnModel().getColumn(2).setMinWidth(70);
+            ListaPersonajes.getColumnModel().getColumn(2).setPreferredWidth(70);
+            ListaPersonajes.getColumnModel().getColumn(3).setMinWidth(100);
+            ListaPersonajes.getColumnModel().getColumn(3).setPreferredWidth(100);
+            ListaPersonajes.getColumnModel().getColumn(4).setMinWidth(70);
+            ListaPersonajes.getColumnModel().getColumn(4).setPreferredWidth(70);
+            ListaPersonajes.getColumnModel().getColumn(5).setMinWidth(60);
+            ListaPersonajes.getColumnModel().getColumn(5).setPreferredWidth(60);
+            ListaPersonajes.getColumnModel().getColumn(6).setMinWidth(70);
+            ListaPersonajes.getColumnModel().getColumn(6).setPreferredWidth(70);
+            ListaPersonajes.getColumnModel().getColumn(7).setMinWidth(80);
+            ListaPersonajes.getColumnModel().getColumn(7).setPreferredWidth(80);
+            ListaPersonajes.getColumnModel().getColumn(8).setMinWidth(90);
+            ListaPersonajes.getColumnModel().getColumn(8).setPreferredWidth(90);
+            ListaPersonajes.getColumnModel().getColumn(9).setMinWidth(80);
+            ListaPersonajes.getColumnModel().getColumn(9).setPreferredWidth(80);
+        }
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 860, 360));
 
         Background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/BgPersonajes.png"))); // NOI18N
         getContentPane().add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 920, 550));
@@ -114,128 +155,213 @@ public class PersonajesPantalla extends PantallaMadreMenues {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AgregarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarBtnActionPerformed
-        boolean datosValidos = false;
+        JTextField txtNombre = new JTextField(15);
+        JTextField txtPseudonimo = new JTextField(15);
+        JComboBox<String> comboTipo = new JComboBox<>();
+        JComboBox<String> comboOrigen = new JComboBox<>();
+        JComboBox<String> comboFranquicia = new JComboBox<>();
+        JTextField txtFuerza = new JTextField(5);
+        JTextField txtVelocidad = new JTextField(5);
+        JTextField txtInteligencia = new JTextField(5);
+        JTextField txtRecursos = new JTextField(5);
 
-        JTextField txtNombreCiudad = new JTextField(15);
-        JComboBox<String> comboPais = new JComboBox<>();
-        JTextField txtPoblacion = new JTextField(10);
-        JTextField txtCoordenadas = new JTextField(15);
-
-        // Llenar el ComboBox con los valores del enum
-        for (Pais pais : Pais.values()) {
-            comboPais.addItem(pais.getNombre());
+        for (Personaje.TipoPersonaje tipo : Personaje.TipoPersonaje.values()) {
+            comboTipo.addItem(tipo.getNombre());
+        }
+        for (Personaje.TipoOrigen origen : Personaje.TipoOrigen.values()) {
+            comboOrigen.addItem(origen.getNombre());
+        }
+        for (Personaje.TipoFranquicia franquicia : Personaje.TipoFranquicia.values()) {
+            comboFranquicia.addItem(franquicia.getNombre());
         }
 
-        do {
-            JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
-            panel.add(new JLabel("Nombre de la Ciudad:"));
-            panel.add(txtNombreCiudad);
-            panel.add(new JLabel("País:"));
-            panel.add(comboPais);
-            panel.add(new JLabel("Población:"));
-            panel.add(txtPoblacion);
-            panel.add(new JLabel("Coordenadas:"));
-            panel.add(txtCoordenadas);
+        JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
+        panel.add(new JLabel("Nombre:"));
+        panel.add(txtNombre);
+        panel.add(new JLabel("Pseudónimo:"));
+        panel.add(txtPseudonimo);
+        panel.add(new JLabel("Tipo:"));
+        panel.add(comboTipo);
+        panel.add(new JLabel("Origen:"));
+        panel.add(comboOrigen);
+        panel.add(new JLabel("Franquicia:"));
+        panel.add(comboFranquicia);
+        panel.add(new JLabel("Fuerza:"));
+        panel.add(txtFuerza);
+        panel.add(new JLabel("Velocidad:"));
+        panel.add(txtVelocidad);
+        panel.add(new JLabel("Inteligencia:"));
+        panel.add(txtInteligencia);
+        panel.add(new JLabel("Recursos Económicos:"));
+        panel.add(txtRecursos);
 
-            int result = JOptionPane.showConfirmDialog(this, panel, "Agregar Ciudad", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        int result = JOptionPane.showConfirmDialog(this, panel, "Agregar Personaje", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-            if (result == JOptionPane.OK_OPTION) {
-                String nombre = txtNombreCiudad.getText().trim();
-                String pais = (String) comboPais.getSelectedItem();
-                String poblacion = txtPoblacion.getText().trim();
-                String coordenadas = txtCoordenadas.getText().trim();
+        if (result == JOptionPane.OK_OPTION) {
+            try {
+                String nombre = txtNombre.getText().trim();
+                String pseudonimo = txtPseudonimo.getText().trim();
+                String tipoSeleccionado = (String) comboTipo.getSelectedItem();
+                String origenSeleccionado = (String) comboOrigen.getSelectedItem();
+                String franquiciaSeleccionada = (String) comboFranquicia.getSelectedItem();
 
-                // Validaciones aquí (similar al código previo)
-                // ...
+                // Buscar el enum correspondiente
+                Personaje.TipoPersonaje tipo = null;
+                for (Personaje.TipoPersonaje t : Personaje.TipoPersonaje.values()) {
+                    if (t.getNombre().equals(tipoSeleccionado)) {
+                        tipo = t;
+                        break;
+                    }
+                }
 
-                DefaultTableModel model = (DefaultTableModel) ListaPersonajes.getModel();
-                model.addRow(new Object[]{nombre, pais, poblacion, coordenadas});
-                datosValidos = true;
-            } else {
-                datosValidos = true; // Cerrar si el usuario cancela
+                Personaje.TipoOrigen origen = null;
+                for (Personaje.TipoOrigen o : Personaje.TipoOrigen.values()) {
+                    if (o.getNombre().equals(origenSeleccionado)) {
+                        origen = o;
+                        break;
+                    }
+                }
+
+                Personaje.TipoFranquicia franquicia = null;
+                for (Personaje.TipoFranquicia f : Personaje.TipoFranquicia.values()) {
+                    if (f.getNombre().equals(franquiciaSeleccionada)) {
+                        franquicia = f;
+                        break;
+                    }
+                }
+
+                double fuerza = Double.parseDouble(txtFuerza.getText().trim());
+                double velocidad = Double.parseDouble(txtVelocidad.getText().trim());
+                double inteligencia = Double.parseDouble(txtInteligencia.getText().trim());
+                double recursos = Double.parseDouble(txtRecursos.getText().trim());
+
+                Personaje nuevoPersonaje = new Personaje(nombre, new Date(), "Desconocido", "", tipo, pseudonimo, "", origen, franquicia, fuerza, velocidad, inteligencia, recursos);
+                PersonajeManager.agregarPersonaje(nuevoPersonaje);
+                poblarLaTablaPersonajes();
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Ingrese valores numéricos válidos para atributos de poder.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        } while (!datosValidos);
+        }
     }//GEN-LAST:event_AgregarBtnActionPerformed
 
     private void EditarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditarBtnActionPerformed
         int filaSeleccionada = ListaPersonajes.getSelectedRow();
         if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione una fila para editar.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Seleccione un personaje para editar.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        DefaultTableModel model = (DefaultTableModel) ListaPersonajes.getModel();
-        String nombreActual = model.getValueAt(filaSeleccionada, 0).toString();
-        String paisActual = model.getValueAt(filaSeleccionada, 1).toString();
-        String poblacionActual = model.getValueAt(filaSeleccionada, 2).toString();
-        String coordenadasActual = model.getValueAt(filaSeleccionada, 3).toString();
+        Personaje personaje = PersonajeManager.getListaPersonajes().get(filaSeleccionada);
 
-        JTextField txtNombreCiudad = new JTextField(nombreActual, 15);
-        JComboBox<String> comboPais = new JComboBox<>();
-        JTextField txtPoblacion = new JTextField(poblacionActual, 10);
-        JTextField txtCoordenadas = new JTextField(coordenadasActual, 15);
+        JTextField txtNombre = new JTextField(personaje.getNombre(), 15);
+        JTextField txtPseudonimo = new JTextField(personaje.getPseudonimo(), 15);
+        JComboBox<String> comboTipo = new JComboBox<>();
+        JComboBox<String> comboOrigen = new JComboBox<>();
+        JComboBox<String> comboFranquicia = new JComboBox<>();
+        JTextField txtFuerza = new JTextField(String.valueOf(personaje.getFuerza()), 5);
+        JTextField txtVelocidad = new JTextField(String.valueOf(personaje.getVelocidad()), 5);
+        JTextField txtInteligencia = new JTextField(String.valueOf(personaje.getInteligencia()), 5);
+        JTextField txtRecursos = new JTextField(String.valueOf(personaje.getRecursosEconomicos()), 5);
 
-        // Llenar el ComboBox con los valores del enum
-        for (Pais pais : Pais.values()) {
-            comboPais.addItem(pais.getNombre());
+        for (Personaje.TipoPersonaje tipo : Personaje.TipoPersonaje.values()) {
+            comboTipo.addItem(tipo.getNombre());
         }
-        // Seleccionar el país actual
-        comboPais.setSelectedItem(paisActual);
+        comboTipo.setSelectedItem(personaje.getPersonaje().getNombre());
+
+        for (Personaje.TipoOrigen origen : Personaje.TipoOrigen.values()) {
+            comboOrigen.addItem(origen.getNombre());
+        }
+        comboOrigen.setSelectedItem(personaje.getOrigen().getNombre());
+
+        for (Personaje.TipoFranquicia franquicia : Personaje.TipoFranquicia.values()) {
+            comboFranquicia.addItem(franquicia.getNombre());
+        }
+        comboFranquicia.setSelectedItem(personaje.getFranquicia().getNombre());
 
         JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
-        panel.add(new JLabel("Nombre de la Ciudad:"));
-        panel.add(txtNombreCiudad);
-        panel.add(new JLabel("País:"));
-        panel.add(comboPais);
-        panel.add(new JLabel("Población:"));
-        panel.add(txtPoblacion);
-        panel.add(new JLabel("Coordenadas:"));
-        panel.add(txtCoordenadas);
+        panel.add(new JLabel("Nombre:"));
+        panel.add(txtNombre);
+        panel.add(new JLabel("Pseudónimo:"));
+        panel.add(txtPseudonimo);
+        panel.add(new JLabel("Tipo:"));
+        panel.add(comboTipo);
+        panel.add(new JLabel("Origen:"));
+        panel.add(comboOrigen);
+        panel.add(new JLabel("Franquicia:"));
+        panel.add(comboFranquicia);
+        panel.add(new JLabel("Fuerza:"));
+        panel.add(txtFuerza);
+        panel.add(new JLabel("Velocidad:"));
+        panel.add(txtVelocidad);
+        panel.add(new JLabel("Inteligencia:"));
+        panel.add(txtInteligencia);
+        panel.add(new JLabel("Recursos Económicos:"));
+        panel.add(txtRecursos);
 
-        int result = JOptionPane.showConfirmDialog(this, panel, "Editar Ciudad", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        int result = JOptionPane.showConfirmDialog(this, panel, "Editar Personaje", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
-            String nuevoNombre = txtNombreCiudad.getText().trim();
-            String nuevoPais = (String) comboPais.getSelectedItem();
-            String nuevaPoblacion = txtPoblacion.getText().trim();
-            String nuevasCoordenadas = txtCoordenadas.getText().trim();
+            personaje.setPseudonimo(txtPseudonimo.getText().trim());
 
-            // Validaciones aquí (similar al código previo)
-            // ...
+            // Buscar el enum correspondiente en base al texto seleccionado
+            String tipoSeleccionado = (String) comboTipo.getSelectedItem();
+            for (Personaje.TipoPersonaje tipo : Personaje.TipoPersonaje.values()) {
+                if (tipo.getNombre().equals(tipoSeleccionado)) {
+                    personaje.setPersonaje(tipo);
+                    break;
+                }
+            }
 
-            model.setValueAt(nuevoNombre, filaSeleccionada, 0);
-            model.setValueAt(nuevoPais, filaSeleccionada, 1);
-            model.setValueAt(nuevaPoblacion, filaSeleccionada, 2);
-            model.setValueAt(nuevasCoordenadas, filaSeleccionada, 3);
+            String origenSeleccionado = (String) comboOrigen.getSelectedItem();
+            for (Personaje.TipoOrigen origen : Personaje.TipoOrigen.values()) {
+                if (origen.getNombre().equals(origenSeleccionado)) {
+                    personaje.setOrigen(origen);
+                    break;
+                }
+            }
 
-            JOptionPane.showMessageDialog(this, "Ciudad actualizada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            String franquiciaSeleccionada = (String) comboFranquicia.getSelectedItem();
+            for (Personaje.TipoFranquicia franquicia : Personaje.TipoFranquicia.values()) {
+                if (franquicia.getNombre().equals(franquiciaSeleccionada)) {
+                    personaje.setFranquicia(franquicia);
+                    break;
+                }
+            }
+
+            personaje.setFuerza(Double.parseDouble(txtFuerza.getText().trim()));
+            personaje.setVelocidad(Double.parseDouble(txtVelocidad.getText().trim()));
+            personaje.setInteligencia(Double.parseDouble(txtInteligencia.getText().trim()));
+            personaje.setRecursosEconomicos(Double.parseDouble(txtRecursos.getText().trim()));
+
+            PersonajeManager.editarPersonaje(filaSeleccionada, personaje);
+            poblarLaTablaPersonajes();
         }
     }//GEN-LAST:event_EditarBtnActionPerformed
 
     private void EliminarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarBtnActionPerformed
-        // Verificar si hay una fila seleccionada
         int filaSeleccionada = ListaPersonajes.getSelectedRow();
         if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione una fila para eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Seleccione un personaje para eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Confirmar la eliminación con el usuario
         int confirmacion = JOptionPane.showConfirmDialog(
             this,
-            "¿Está seguro de que desea eliminar esta ciudad?",
+            "¿Está seguro de que desea eliminar este personaje?",
             "Confirmar Eliminación",
             JOptionPane.YES_NO_OPTION,
             JOptionPane.WARNING_MESSAGE
         );
 
         if (confirmacion == JOptionPane.YES_OPTION) {
-            // Eliminar la fila del modelo de la tabla
-            DefaultTableModel model = (DefaultTableModel) ListaPersonajes.getModel();
-            model.removeRow(filaSeleccionada);
+            // Eliminar el personaje del manager
+            PersonajeManager.eliminarPersonaje(filaSeleccionada);
 
-            // Mensaje de confirmación
-            JOptionPane.showMessageDialog(this, "Ciudad eliminada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            // Actualizar la tabla después de la eliminación
+            poblarLaTablaPersonajes();
+
+            // Notificar al usuario
+            JOptionPane.showMessageDialog(this, "Personaje eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_EliminarBtnActionPerformed
 

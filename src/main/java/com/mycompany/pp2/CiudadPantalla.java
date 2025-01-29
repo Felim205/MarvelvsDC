@@ -112,7 +112,7 @@ public class CiudadPantalla extends PantallaMadreMenues {
         });
         jScrollPane1.setViewportView(ListaCiudades);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 760, 360));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 770, 360));
 
         AgregarBtn.setText("Agregar");
         AgregarBtn.setToolTipText("");
