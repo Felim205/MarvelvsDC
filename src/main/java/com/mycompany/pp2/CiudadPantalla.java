@@ -1,7 +1,7 @@
 package com.mycompany.pp2;
 
-import com.mycompany.pp2.Ciudad;
-import com.mycompany.pp2.Ciudad.TipoEscenario;
+import com.mycompany.pp2.clases.Ciudad;
+import com.mycompany.pp2.clases.Ciudad.TipoEscenario;
 import com.mycompany.pp2.managers.CiudadManager;
 
 

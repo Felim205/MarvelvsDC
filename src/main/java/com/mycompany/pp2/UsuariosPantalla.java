@@ -1,5 +1,6 @@
 package com.mycompany.pp2;
 
+import com.mycompany.pp2.clases.Usuario;
 import com.mycompany.pp2.managers.UsuarioManager;
 import javax.swing.*;
 import java.awt.GridLayout;

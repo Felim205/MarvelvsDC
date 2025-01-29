@@ -4,7 +4,7 @@
  */
 package com.mycompany.pp2.managers;
 
-import com.mycompany.pp2.Personaje;
+import com.mycompany.pp2.clases.Personaje;
 import java.util.ArrayList;
 import java.util.List;
 

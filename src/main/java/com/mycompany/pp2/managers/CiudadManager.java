@@ -4,7 +4,7 @@
  */
 package com.mycompany.pp2.managers;
 
-import com.mycompany.pp2.Ciudad;
+import com.mycompany.pp2.clases.Ciudad;
 import java.util.ArrayList;
 import java.util.List;
 

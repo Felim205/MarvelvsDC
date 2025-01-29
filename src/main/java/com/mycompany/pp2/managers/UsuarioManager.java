@@ -4,8 +4,8 @@
  */
 package com.mycompany.pp2.managers;
 
-import com.mycompany.pp2.Usuario;
-import com.mycompany.pp2.Usuario;
+import com.mycompany.pp2.clases.Usuario;
+import com.mycompany.pp2.clases.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,5 +1,6 @@
 package com.mycompany.pp2;
 
+import com.mycompany.pp2.clases.Personaje;
 import com.mycompany.pp2.managers.PersonajeManager;
 import java.awt.GridLayout;
 import javax.swing.*;
