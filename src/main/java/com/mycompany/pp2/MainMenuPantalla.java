@@ -1,11 +1,18 @@
 package com.mycompany.pp2;
 
+import com.mycompany.pp2.clases.JuegoMarvelvsDC;
+import com.mycompany.pp2.managers.CiudadManager;
+import com.mycompany.pp2.managers.PersonajeManager;
+import com.mycompany.pp2.managers.UsuarioManager;
+
+
 /**
  *
  * @author gabob
  */
-public class MainMenuPantalla extends PantallaMadreMenues {
 
+public class MainMenuPantalla extends PantallaMadreMenues {
+    
     /**
      * Constructor de PantallaMadreMenues
      */
@@ -13,7 +20,13 @@ public class MainMenuPantalla extends PantallaMadreMenues {
         super();
         initComponents();
         personalizarPantalla();
+
+        CiudadManager.inicializarCiudades();
+        PersonajeManager.inicializarPersonajes();
+        UsuarioManager.inicializarUsuarios();
     }
+
+  
     
     private void personalizarPantalla() {
         // Cambiar el título de la ventana

@@ -171,7 +171,7 @@ public class Personaje extends Persona {
 
     // Método para calcular el poder total
     public int poderTotal() {
-        return (int) (fuerza + velocidad + inteligencia + recursosEconomicos);
+        return (int) ((fuerza + velocidad + inteligencia + recursosEconomicos) / 4);
     }
 
     // Método para calcular el daño de ataque

@@ -40,8 +40,8 @@ public class PersonajesPantalla extends PantallaMadreMenues {
             int inteligencia = (int) personaje.getInteligencia();
             int recursos = (int) personaje.getRecursosEconomicos();
 
-            // Cálculo del poder total con la formula (mult)/100
-            double poderTotal = (fuerza * velocidad * inteligencia * recursos) / 100.0;
+            // Usar el método poderTotal() en lugar de hacer un cálculo manual
+            double poderTotal = personaje.poderTotal();
 
             model.addRow(new Object[]{
                 personaje.getNombre(),
@@ -54,6 +54,7 @@ public class PersonajesPantalla extends PantallaMadreMenues {
             });
         }
     }
+
     
     /**
      * This method is called from within the constructor to initialize the form.

@@ -19,7 +19,9 @@ public class Ciudad {
         CIUDAD("Ciudad"),
         BOSQUE("Bosque"),
         MONTAÑA("Montaña"),
-        DESIERTO("Desierto");
+        DESIERTO("Desierto"),
+        PLAYA("Playa"),
+        MAR("Mar");
 
         private final String nombre;
 

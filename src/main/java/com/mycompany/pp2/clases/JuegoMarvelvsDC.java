@@ -1,177 +1,155 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.pp2.clases;
 
-import com.mycompany.pp2.clases.Ciudad;
+import java.io.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class JuegoMarvelvsDC {
+public class JuegoMarvelvsDC implements Serializable {
+    private static final long serialVersionUID = 1L; // Versión de serialización
+
     // Atributos
     private String nombreJuego;
     private Collection<Usuario> usuarios;
-    private Collection<Persona> personajes;
+    private Collection<Personaje> personajes;
     private Collection<Ciudad> ciudades;
 
-    // Constructor vacío
+    // Archivo donde se guardarán los datos
+    private static final String ARCHIVO_DATOS = "juego_datos.dat";
+
+    // Constructor
     public JuegoMarvelvsDC() {
         this.nombreJuego = "Marvel vs DC";
         this.usuarios = new ArrayList<>();
         this.personajes = new ArrayList<>();
         this.ciudades = new ArrayList<>();
+        verificarYCrearDatos(); // Cargar o crear datos al iniciar la clase
     }
 
-    // Constructor con nombre del juego
-    public JuegoMarvelvsDC(String nombreJuego) {
-        this.nombreJuego = nombreJuego;
-        this.usuarios = new ArrayList<>();
-        this.personajes = new ArrayList<>();
-        this.ciudades = new ArrayList<>();
+    // Función para verificar si hay datos, si no, crear los datos iniciales
+    public void verificarYCrearDatos() {
+        File archivo = new File(ARCHIVO_DATOS);
+        if (!archivo.exists() || archivo.length() == 0) { // Si no existe o está vacío
+            System.out.println("No hay datos guardados. Creando datos iniciales...");
+            crearDatosIniciales();
+        } else {
+            cargarDatos();
+        }
     }
 
-    // Getters y setters
-    public String getNombreJuego() {
-        return nombreJuego;
-    }
+    // Función para crear datos predefinidos
+    public void crearDatosIniciales() {
+        // Ciudades predefinidas
+        agregarCiudad(new Ciudad("Estados Unidos", "New York", "New York", Ciudad.TipoEscenario.CIUDAD));
+        agregarCiudad(new Ciudad("Latveria", "Reino de Latveria", "Doomstadt", Ciudad.TipoEscenario.MONTAÑA));
+        agregarCiudad(new Ciudad("Genosha", "República de Genosha", "Hammer Bay", Ciudad.TipoEscenario.CIUDAD));
 
-    public void setNombreJuego(String nombreJuego) {
-        this.nombreJuego = nombreJuego;
-    }
+        // Personajes predefinidos
+        registrarPersonaje(new Personaje("Peter Parker", null, "New York", "", Personaje.TipoPersonaje.HEROE, "Spider-Man", "",
+                Personaje.TipoOrigen.META_HUMANO, Personaje.TipoFranquicia.MARVEL, 90, 85, 85, 5));
 
-    public Collection<Usuario> getUsuarios() {
-        return usuarios;
-    }
+        registrarPersonaje(new Personaje("Bruce Wayne", null, "Gotham", "", Personaje.TipoPersonaje.HEROE, "Batman", "",
+                Personaje.TipoOrigen.META_HUMANO, Personaje.TipoFranquicia.DC, 75, 60, 90, 100));
 
-    public void setUsuarios(Collection<Usuario> usuarios) {
-        this.usuarios = usuarios;
-    }
+        registrarPersonaje(new Personaje("Tony Stark", null, "New York", "", Personaje.TipoPersonaje.HEROE, "Iron Man", "",
+                Personaje.TipoOrigen.META_HUMANO, Personaje.TipoFranquicia.MARVEL, 80, 90, 80, 100));
 
-    public Collection<Persona> getPersonajes() {
-        return personajes;
-    }
+        registrarPersonaje(new Personaje("Clark Kent", null, "Metrópolis", "", Personaje.TipoPersonaje.HEROE, "Superman", "",
+                Personaje.TipoOrigen.ALIENIGENA, Personaje.TipoFranquicia.DC, 100, 95, 65, 15));
 
-    public void setPersonajes(Collection<Persona> personajes) {
-        this.personajes = personajes;
-    }
+        registrarPersonaje(new Personaje("Reed Richards", null, "New York", "", Personaje.TipoPersonaje.HEROE, "Mr. Fantastic", "",
+                Personaje.TipoOrigen.META_HUMANO, Personaje.TipoFranquicia.MARVEL, 50, 40, 100, 90));
 
-    public Collection<Ciudad> getCiudades() {
-        return ciudades;
-    }
+        registrarPersonaje(new Personaje("Wanda Maximoff", null, "Sokovia", "", Personaje.TipoPersonaje.HEROE, "Scarlet Witch", "",
+                Personaje.TipoOrigen.MUTANTE, Personaje.TipoFranquicia.MARVEL, 85, 35, 60, 40));
 
-    public void setCiudades(Collection<Ciudad> ciudades) {
-        this.ciudades = ciudades;
+        // Usuarios predefinidos
+        registrarUsuario(new Usuario("Gabriel", "Barrantes V", "GaboBaVi", "gabbarrantes@estudiantec.cr", "estoesprivado!!!"));
+
+        guardarDatos();
+        System.out.println("Datos iniciales creados y guardados.");
     }
 
     // Métodos para Usuarios
     public void registrarUsuario(Usuario usuario) {
         if (usuario != null && !usuarios.contains(usuario)) {
             usuarios.add(usuario);
-            System.out.println("Usuario registrado: " + usuario);
-        } else {
-            System.out.println("El usuario ya está registrado o es inválido.");
-        }
-    }
-
-    public void editarUsuario(Usuario usuario, String nuevoNombre, String nuevoCorreo) {
-        if (usuarios.contains(usuario)) {
-            usuario.setNombre(nuevoNombre);
-            usuario.setCorreo(nuevoCorreo);
-            System.out.println("Usuario editado: " + usuario);
-        } else {
-            System.out.println("Usuario no encontrado.");
+            guardarDatos();
         }
     }
 
     public void eliminarUsuario(Usuario usuario) {
-        if (usuarios.contains(usuario)) {
-            usuarios.remove(usuario);
-            System.out.println("Usuario eliminado: " + usuario);
-        } else {
-            System.out.println("Usuario no encontrado.");
+        if (usuarios.remove(usuario)) {
+            guardarDatos();
         }
     }
 
     // Métodos para Personajes
-    public void registrarPersonaje(Persona personaje) {
+    public void registrarPersonaje(Personaje personaje) {
         if (personaje != null && !personajes.contains(personaje)) {
             personajes.add(personaje);
-            System.out.println("Personaje registrado: " + personaje);
-        } else {
-            System.out.println("El personaje ya está registrado o es inválido.");
+            guardarDatos();
         }
     }
 
-    public void editarPersonaje(Persona personaje, String nuevoNombre) {
-        if (personajes.contains(personaje)) {
-            personaje.setNombre(nuevoNombre);
-            System.out.println("Personaje editado: " + personaje);
-        } else {
-            System.out.println("Personaje no encontrado.");
-        }
-    }
-
-    public void eliminarPersonaje(Persona personaje) {
-        if (personajes.contains(personaje)) {
-            personajes.remove(personaje);
-            System.out.println("Personaje eliminado: " + personaje);
-        } else {
-            System.out.println("Personaje no encontrado.");
+    public void eliminarPersonaje(Personaje personaje) {
+        if (personajes.remove(personaje)) {
+            guardarDatos();
         }
     }
 
     // Métodos para Ciudades
-    public void cargarCiudad(Ciudad ciudad) {
-        if (ciudad != null && !ciudades.contains(ciudad)) {
-            ciudades.add(ciudad);
-            System.out.println("Ciudad cargada: " + ciudad);
-        } else {
-            System.out.println("La ciudad ya está cargada o es inválida.");
-        }
-    }
-
-    public void editarCiudad(Ciudad ciudad, String nuevoEstado, String nuevoPais) {
-        if (ciudades.contains(ciudad)) {
-            ciudad.setEstado(nuevoEstado);
-            ciudad.setPais(nuevoPais);
-            System.out.println("Ciudad editada: " + ciudad);
-        } else {
-            System.out.println("Ciudad no encontrada.");
-        }
-    }
-
     public void agregarCiudad(Ciudad ciudad) {
         if (ciudad != null && !ciudades.contains(ciudad)) {
             ciudades.add(ciudad);
-            System.out.println("Ciudad agregada: " + ciudad);
-        } else {
-            System.out.println("La ciudad ya existe o es inválida.");
+            guardarDatos();
         }
     }
 
-    public void guardarCiudad(Ciudad ciudad) {
-        if (!ciudades.contains(ciudad)) {
-            ciudades.add(ciudad);
-            System.out.println("Ciudad guardada: " + ciudad);
-        } else {
-            System.out.println("La ciudad ya estaba guardada.");
+    public void eliminarCiudad(Ciudad ciudad) {
+        if (ciudades.remove(ciudad)) {
+            guardarDatos();
         }
     }
 
-    // Método toString
+    // Métodos para guardar y cargar datos desde archivo
+    public void guardarDatos() {
+        try (ObjectOutputStream salida = new ObjectOutputStream(new FileOutputStream(ARCHIVO_DATOS))) {
+            salida.writeObject(this);
+        } catch (IOException e) {
+            System.out.println("Error al guardar los datos: " + e.getMessage());
+        }
+    }
+
+    public void cargarDatos() {
+        File archivo = new File(ARCHIVO_DATOS);
+        if (archivo.exists()) {
+            try (ObjectInputStream entrada = new ObjectInputStream(new FileInputStream(ARCHIVO_DATOS))) {
+                JuegoMarvelvsDC datosCargados = (JuegoMarvelvsDC) entrada.readObject();
+                this.usuarios = datosCargados.usuarios;
+                this.personajes = datosCargados.personajes;
+                this.ciudades = datosCargados.ciudades;
+            } catch (IOException | ClassNotFoundException e) {
+                System.out.println("Error al cargar los datos: " + e.getMessage());
+            }
+        }
+    }
+
+    // Método para mostrar el estado del juego
     @Override
     public String toString() {
         return "JuegoMarvelvsDC{" +
                 "nombreJuego='" + nombreJuego + '\'' +
-                ", usuarios=" + usuarios +
-                ", personajes=" + personajes +
-                ", ciudades=" + ciudades +
+                ", usuarios=" + usuarios.size() +
+                ", personajes=" + personajes.size() +
+                ", ciudades=" + ciudades.size() +
                 '}';
     }
 
+    // Método principal de prueba
     public static void main(String[] args) {
-        
+        JuegoMarvelvsDC juego = new JuegoMarvelvsDC();
+        System.out.println(juego);
     }
 }
 
