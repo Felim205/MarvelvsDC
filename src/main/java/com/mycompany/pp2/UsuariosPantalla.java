@@ -68,6 +68,7 @@ public class UsuariosPantalla extends PantallaMadreMenues {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        AgregarBtn.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 14)); // NOI18N
         AgregarBtn.setText("Agregar");
         AgregarBtn.setToolTipText("");
         AgregarBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -77,6 +78,7 @@ public class UsuariosPantalla extends PantallaMadreMenues {
         });
         getContentPane().add(AgregarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 480, 170, 40));
 
+        EditarBtn.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 14)); // NOI18N
         EditarBtn.setText("Editar");
         EditarBtn.setToolTipText("");
         EditarBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -86,6 +88,7 @@ public class UsuariosPantalla extends PantallaMadreMenues {
         });
         getContentPane().add(EditarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 480, 170, 40));
 
+        EliminarBtn.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 14)); // NOI18N
         EliminarBtn.setText("Eliminar");
         EliminarBtn.setToolTipText("");
         EliminarBtn.addActionListener(new java.awt.event.ActionListener() {

@@ -63,6 +63,7 @@ public class RankingsPantalla extends PantallaMadreMenues {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        Actualizar.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 14)); // NOI18N
         Actualizar.setText("Actualizar");
         Actualizar.setToolTipText("");
         Actualizar.addActionListener(new java.awt.event.ActionListener() {
@@ -72,6 +73,7 @@ public class RankingsPantalla extends PantallaMadreMenues {
         });
         getContentPane().add(Actualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 490, 170, 40));
 
+        EliminarBtn.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 14)); // NOI18N
         EliminarBtn.setText("Exportar");
         EliminarBtn.setToolTipText("");
         EliminarBtn.addActionListener(new java.awt.event.ActionListener() {
