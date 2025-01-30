@@ -5,17 +5,19 @@
 package com.mycompany.pp2.clases;
 
 
-
 import java.util.Date;
 
-public class Heroe extends Personaje {
+import java.util.Date;
+import java.util.Random;
 
-    // Constructor vacío
+public class Heroe extends Personaje {
+    private double vida = 100; // Vida inicial
+    private Random random = new Random(); // Para generar la probabilidad de esquivar
+
     public Heroe() {
         super();
     }
 
-    // Constructor con parámetros
     public Heroe(String nombre, Date fechaNacimiento, String paisResidencia, String foto,
                  TipoPersonaje personaje, String pseudonimo, String fotografia, TipoOrigen origen,
                  TipoFranquicia franquicia, double fuerza, double velocidad, double inteligencia,
@@ -24,7 +26,30 @@ public class Heroe extends Personaje {
                 fuerza, velocidad, inteligencia, recursosEconomicos);
     }
 
-    // Método toString
+    // Método para calcular la probabilidad de esquivar
+    public boolean esquivarAtaque() {
+        double probabilidadEsquivar = (getInteligencia() * getVelocidad()) / 100;
+        double randomValue = random.nextDouble() * 100; // Número entre 0 y 100
+        return randomValue <= probabilidadEsquivar;
+    }
+
+    // Método para recibir un ataque
+    public void recibirAtaque(Personaje atacante) {
+        if (!esquivarAtaque()) { // Si no esquiva el ataque
+            double daño = atacante.calcularAtaque();
+            vida -= daño;
+            if (vida < 0) vida = 0;
+        }
+    }
+
+    public int getVidaPorcentaje() {
+        return (int) vida;
+    }
+
+    public double getVida() {
+        return vida;
+    }
+
     @Override
     public String toString() {
         return "Heroe{} " + super.toString();
