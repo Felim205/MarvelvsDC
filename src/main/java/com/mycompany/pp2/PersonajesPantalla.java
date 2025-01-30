@@ -31,25 +31,29 @@ public class PersonajesPantalla extends PantallaMadreMenues {
     }
     
     public void poblarLaTablaPersonajes() {
-    DefaultTableModel model = (DefaultTableModel) ListaPersonajes.getModel();
-    model.setRowCount(0); // Limpia las filas actuales de la tabla
+        DefaultTableModel model = (DefaultTableModel) ListaPersonajes.getModel();
+        model.setRowCount(0); // Limpiar la tabla antes de actualizar
 
-    // Rellenar la tabla con los datos de PersonajeManager
-    for (Personaje personaje : PersonajeManager.getListaPersonajes()) {
-        model.addRow(new Object[]{
-            personaje.getNombre(),
-            personaje.getPseudonimo(),
-            personaje.getPersonaje().toString(),
-            personaje.getOrigen().toString(),
-            personaje.getFranquicia().toString(),
-            personaje.getFuerza(),
-            personaje.getVelocidad(),
-            personaje.getInteligencia(),
-            personaje.getRecursosEconomicos(),
-            personaje.poderTotal()
-        });
+        for (Personaje personaje : PersonajeManager.getListaPersonajes()) {
+            int fuerza = (int) personaje.getFuerza();
+            int velocidad = (int) personaje.getVelocidad();
+            int inteligencia = (int) personaje.getInteligencia();
+            int recursos = (int) personaje.getRecursosEconomicos();
+
+            // Cálculo del poder total con la formula (mult)/100
+            double poderTotal = (fuerza * velocidad * inteligencia * recursos) / 100.0;
+
+            model.addRow(new Object[]{
+                personaje.getNombre(),
+                personaje.getPseudonimo(),
+                personaje.getPersonaje().getNombre(),   
+                personaje.getOrigen().getNombre(),     
+                personaje.getFranquicia().getNombre(),
+                fuerza + "%", velocidad + "%", inteligencia + "%", recursos + "%", 
+                Math.round(poderTotal) + "%"
+            });
+        }
     }
-}
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -125,9 +129,8 @@ public class PersonajesPantalla extends PantallaMadreMenues {
         });
         jScrollPane1.setViewportView(ListaPersonajes);
         if (ListaPersonajes.getColumnModel().getColumnCount() > 0) {
-            ListaPersonajes.getColumnModel().getColumn(0).setMinWidth(80);
             ListaPersonajes.getColumnModel().getColumn(0).setPreferredWidth(80);
-            ListaPersonajes.getColumnModel().getColumn(1).setMinWidth(95);
+            ListaPersonajes.getColumnModel().getColumn(1).setResizable(false);
             ListaPersonajes.getColumnModel().getColumn(1).setPreferredWidth(95);
             ListaPersonajes.getColumnModel().getColumn(2).setMinWidth(70);
             ListaPersonajes.getColumnModel().getColumn(2).setPreferredWidth(70);
@@ -135,15 +138,15 @@ public class PersonajesPantalla extends PantallaMadreMenues {
             ListaPersonajes.getColumnModel().getColumn(3).setPreferredWidth(100);
             ListaPersonajes.getColumnModel().getColumn(4).setMinWidth(70);
             ListaPersonajes.getColumnModel().getColumn(4).setPreferredWidth(70);
-            ListaPersonajes.getColumnModel().getColumn(5).setMinWidth(60);
+            ListaPersonajes.getColumnModel().getColumn(5).setResizable(false);
             ListaPersonajes.getColumnModel().getColumn(5).setPreferredWidth(60);
-            ListaPersonajes.getColumnModel().getColumn(6).setMinWidth(70);
+            ListaPersonajes.getColumnModel().getColumn(6).setResizable(false);
             ListaPersonajes.getColumnModel().getColumn(6).setPreferredWidth(70);
-            ListaPersonajes.getColumnModel().getColumn(7).setMinWidth(80);
+            ListaPersonajes.getColumnModel().getColumn(7).setResizable(false);
             ListaPersonajes.getColumnModel().getColumn(7).setPreferredWidth(80);
-            ListaPersonajes.getColumnModel().getColumn(8).setMinWidth(90);
+            ListaPersonajes.getColumnModel().getColumn(8).setResizable(false);
             ListaPersonajes.getColumnModel().getColumn(8).setPreferredWidth(90);
-            ListaPersonajes.getColumnModel().getColumn(9).setMinWidth(80);
+            ListaPersonajes.getColumnModel().getColumn(9).setResizable(false);
             ListaPersonajes.getColumnModel().getColumn(9).setPreferredWidth(80);
         }
 
@@ -196,20 +199,46 @@ public class PersonajesPantalla extends PantallaMadreMenues {
         panel.add(new JLabel("Recursos Económicos:"));
         panel.add(txtRecursos);
 
-        int result = JOptionPane.showConfirmDialog(this, panel, "Agregar Personaje", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        boolean datosValidos;
+        do {
+            datosValidos = true;
+            int result = JOptionPane.showConfirmDialog(this, panel, "Agregar Personaje", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-        if (result == JOptionPane.OK_OPTION) {
+            if (result == JOptionPane.CANCEL_OPTION || result == JOptionPane.CLOSED_OPTION) {
+                return; // Si se cancela, no hacer nada.
+            }
+
             try {
                 String nombre = txtNombre.getText().trim();
                 String pseudonimo = txtPseudonimo.getText().trim();
-                String tipoSeleccionado = (String) comboTipo.getSelectedItem();
-                String origenSeleccionado = (String) comboOrigen.getSelectedItem();
-                String franquiciaSeleccionada = (String) comboFranquicia.getSelectedItem();
+                int fuerza = Integer.parseInt(txtFuerza.getText().trim());
+                int velocidad = Integer.parseInt(txtVelocidad.getText().trim());
+                int inteligencia = Integer.parseInt(txtInteligencia.getText().trim());
+                int recursos = Integer.parseInt(txtRecursos.getText().trim());
+
+                // Validar valores dentro del rango 0-100
+                if (fuerza < 0 || fuerza > 100 || velocidad < 0 || velocidad > 100 ||
+                    inteligencia < 0 || inteligencia > 100 || recursos < 0 || recursos > 100) {
+                    JOptionPane.showMessageDialog(this, "Los valores de atributos deben estar entre 0 y 100.", "Error", JOptionPane.ERROR_MESSAGE);
+                    datosValidos = false;
+                    continue;
+                }
+
+                // Validar que no haya personajes duplicados
+                for (Personaje p : PersonajeManager.getListaPersonajes()) {
+                    if (p.getNombre().equalsIgnoreCase(nombre) && p.getPseudonimo().equalsIgnoreCase(pseudonimo)) {
+                        JOptionPane.showMessageDialog(this, "Ya existe un personaje con el mismo Nombre y Pseudónimo.", "Error", JOptionPane.ERROR_MESSAGE);
+                        datosValidos = false;
+                        break;
+                    }
+                }
+
+                if (!datosValidos) continue;
 
                 // Buscar el enum correspondiente
                 Personaje.TipoPersonaje tipo = null;
                 for (Personaje.TipoPersonaje t : Personaje.TipoPersonaje.values()) {
-                    if (t.getNombre().equals(tipoSeleccionado)) {
+                    if (t.getNombre().equals(comboTipo.getSelectedItem())) {
                         tipo = t;
                         break;
                     }
@@ -217,7 +246,7 @@ public class PersonajesPantalla extends PantallaMadreMenues {
 
                 Personaje.TipoOrigen origen = null;
                 for (Personaje.TipoOrigen o : Personaje.TipoOrigen.values()) {
-                    if (o.getNombre().equals(origenSeleccionado)) {
+                    if (o.getNombre().equals(comboOrigen.getSelectedItem())) {
                         origen = o;
                         break;
                     }
@@ -225,24 +254,21 @@ public class PersonajesPantalla extends PantallaMadreMenues {
 
                 Personaje.TipoFranquicia franquicia = null;
                 for (Personaje.TipoFranquicia f : Personaje.TipoFranquicia.values()) {
-                    if (f.getNombre().equals(franquiciaSeleccionada)) {
+                    if (f.getNombre().equals(comboFranquicia.getSelectedItem())) {
                         franquicia = f;
                         break;
                     }
                 }
 
-                double fuerza = Double.parseDouble(txtFuerza.getText().trim());
-                double velocidad = Double.parseDouble(txtVelocidad.getText().trim());
-                double inteligencia = Double.parseDouble(txtInteligencia.getText().trim());
-                double recursos = Double.parseDouble(txtRecursos.getText().trim());
-
+                // Crear y agregar el personaje
                 Personaje nuevoPersonaje = new Personaje(nombre, new Date(), "Desconocido", "", tipo, pseudonimo, "", origen, franquicia, fuerza, velocidad, inteligencia, recursos);
                 PersonajeManager.agregarPersonaje(nuevoPersonaje);
                 poblarLaTablaPersonajes();
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Ingrese valores numéricos válidos para atributos de poder.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Ingrese valores numéricos válidos para atributos.", "Error", JOptionPane.ERROR_MESSAGE);
+                datosValidos = false;
             }
-        }
+        } while (!datosValidos);
     }//GEN-LAST:event_AgregarBtnActionPerformed
 
     private void EditarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditarBtnActionPerformed
@@ -355,13 +381,8 @@ public class PersonajesPantalla extends PantallaMadreMenues {
         );
 
         if (confirmacion == JOptionPane.YES_OPTION) {
-            // Eliminar el personaje del manager
             PersonajeManager.eliminarPersonaje(filaSeleccionada);
-
-            // Actualizar la tabla después de la eliminación
             poblarLaTablaPersonajes();
-
-            // Notificar al usuario
             JOptionPane.showMessageDialog(this, "Personaje eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_EliminarBtnActionPerformed

@@ -52,7 +52,7 @@ public class PantallaJuego extends PantallaMadre {
 
         NombreIzq.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 26)); // NOI18N
         NombreIzq.setText("Spider-Man");
-        getContentPane().add(NombreIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 40, -1, -1));
+        getContentPane().add(NombreIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, -1, -1));
 
         ImgIzq.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Ornstein.png"))); // NOI18N
         ImgIzq.setText("jLabel2");
@@ -72,7 +72,7 @@ public class PantallaJuego extends PantallaMadre {
 
         NombreDer.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 26)); // NOI18N
         NombreDer.setText("Spider-Man");
-        getContentPane().add(NombreDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 40, -1, -1));
+        getContentPane().add(NombreDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 40, -1, -1));
 
         ImgDer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Smough.png"))); // NOI18N
         ImgDer.setText("jLabel2");
