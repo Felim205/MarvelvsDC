@@ -9,8 +9,10 @@ import com.mycompany.pp2.clases.Villano;
 import com.mycompany.pp2.clases.Antiheroe;
 import com.mycompany.pp2.clases.Usuario;
 import java.awt.Color;
+import java.awt.Image;
 import java.util.Date;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
@@ -50,6 +52,7 @@ public class PantallaJuego extends PantallaMadre {
         setCustomIcon(this, "images/MvDCicon.png");
         imageStretcher(ImgIzq);
         imageStretcher(ImgDer);
+        imageStretcher(Vs);
         
         actualizarPantalla();
     }
@@ -58,28 +61,42 @@ public class PantallaJuego extends PantallaMadre {
      * Actualiza la interfaz gráfica con la información de los personajes.
      */
     private void actualizarPantalla() {
-        NombreIzq.setText(personaje1.getPseudonimo());
-        NombreDer.setText(personaje2.getPseudonimo());
+        if (personaje1 != null && personaje2 != null && ciudad != null) {
+            // Asignar nombres de los personajes
+            NombreIzq.setText(personaje1.getPseudonimo());
+            NombreDer.setText(personaje2.getPseudonimo());
 
-        ImgIzq.setIcon(new ImageIcon(getClass().getResource(personaje1.getFotografia())));
-        ImgDer.setIcon(new ImageIcon(getClass().getResource(personaje2.getFotografia())));
+            // Asignar nombres de los jugadores
+            JugadorIzq.setText(jugador1.getUserName());
+            JugadorDer.setText(jugador2.getUserName());
 
-        if (personaje1 instanceof Heroe) {
-            ProgressBarIzq.setValue(((Heroe) personaje1).getVidaPorcentaje());
-        } else if (personaje1 instanceof Villano) {
-            ProgressBarIzq.setValue(((Villano) personaje1).getVidaPorcentaje());
-        } else if (personaje1 instanceof Antiheroe) {
-            ProgressBarIzq.setValue(((Antiheroe) personaje1).getVidaPorcentaje());
-        }
+            // Mostrar nombre de la ciudad con guiones
+            Stage.setText("-" + ciudad.getCuidad() + "-");
 
-        if (personaje2 instanceof Heroe) {
-            ProgressBarDer.setValue(((Heroe) personaje2).getVidaPorcentaje());
-        } else if (personaje2 instanceof Villano) {
-            ProgressBarDer.setValue(((Villano) personaje2).getVidaPorcentaje());
-        } else if (personaje2 instanceof Antiheroe) {
-            ProgressBarDer.setValue(((Antiheroe) personaje2).getVidaPorcentaje());
+            // Verificar y redimensionar imágenes
+            setImagenEscalada(ImgIzq, personaje1.getFotografia());
+            setImagenEscalada(ImgDer, personaje2.getFotografia());
+
+            // Configurar la barra de vida
+            ProgressBarIzq.setValue(personaje1.calcularVida());
+            ProgressBarDer.setValue(personaje2.calcularVida());
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al cargar los datos de la partida.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    /**
+    * Escala y asigna una imagen a un JLabel.
+    */
+   private void setImagenEscalada(JLabel label, String rutaImagen) {
+       try {
+           ImageIcon icon = new ImageIcon(getClass().getResource(rutaImagen));
+           Image img = icon.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
+           label.setIcon(new ImageIcon(img));
+       } catch (Exception e) {
+           label.setText("Imagen no disponible");
+       }
+   }
     
     /**
      * Verifica si el juego ha terminado y muestra el ganador.
@@ -105,10 +122,14 @@ public class PantallaJuego extends PantallaMadre {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Stage = new javax.swing.JLabel();
+        Vs = new javax.swing.JLabel();
+        JugadorIzq = new javax.swing.JLabel();
         NombreIzq = new javax.swing.JLabel();
         ImgIzq = new javax.swing.JLabel();
         BtnIzq = new javax.swing.JButton();
         ProgressBarIzq = new javax.swing.JProgressBar();
+        JugadorDer = new javax.swing.JLabel();
         NombreDer = new javax.swing.JLabel();
         ImgDer = new javax.swing.JLabel();
         BtnDer = new javax.swing.JButton();
@@ -121,13 +142,24 @@ public class PantallaJuego extends PantallaMadre {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        Stage.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 36)); // NOI18N
+        Stage.setText("-Ciudad-");
+        getContentPane().add(Stage, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 10, -1, -1));
+
+        Vs.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/vs.png"))); // NOI18N
+        getContentPane().add(Vs, new org.netbeans.lib.awtextra.AbsoluteConstraints(407, 196, 110, 120));
+
+        JugadorIzq.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
+        JugadorIzq.setText("Jugador 1");
+        getContentPane().add(JugadorIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
+
         NombreIzq.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 26)); // NOI18N
-        NombreIzq.setText("Spider-Man");
-        getContentPane().add(NombreIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, -1, -1));
+        NombreIzq.setText("Personaje 1");
+        getContentPane().add(NombreIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, -1, -1));
 
         ImgIzq.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Ornstein.png"))); // NOI18N
         ImgIzq.setText("jLabel2");
-        getContentPane().add(ImgIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, 290, 440));
+        getContentPane().add(ImgIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 270, 430));
 
         BtnIzq.setBackground(new java.awt.Color(53, 152, 155));
         BtnIzq.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 14)); // NOI18N
@@ -139,15 +171,19 @@ public class PantallaJuego extends PantallaMadre {
             }
         });
         getContentPane().add(BtnIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 470, 100, 40));
-        getContentPane().add(ProgressBarIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 80, -1, 10));
+        getContentPane().add(ProgressBarIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 110, -1, 10));
+
+        JugadorDer.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
+        JugadorDer.setText("Jugador 2");
+        getContentPane().add(JugadorDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 10, -1, -1));
 
         NombreDer.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 26)); // NOI18N
         NombreDer.setText("Spider-Man");
-        getContentPane().add(NombreDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 40, -1, -1));
+        getContentPane().add(NombreDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 70, -1, -1));
 
         ImgDer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Smough.png"))); // NOI18N
         ImgDer.setText("jLabel2");
-        getContentPane().add(ImgDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 110, 290, 440));
+        getContentPane().add(ImgDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 120, 270, 430));
 
         BtnDer.setBackground(new java.awt.Color(227, 150, 92));
         BtnDer.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 14)); // NOI18N
@@ -159,7 +195,7 @@ public class PantallaJuego extends PantallaMadre {
             }
         });
         getContentPane().add(BtnDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 470, 100, 40));
-        getContentPane().add(ProgressBarDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 80, -1, 10));
+        getContentPane().add(ProgressBarDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 110, -1, 10));
 
         Background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/BgJuego.png"))); // NOI18N
         getContentPane().add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 920, 550));
@@ -214,9 +250,13 @@ public class PantallaJuego extends PantallaMadre {
     private javax.swing.JButton BtnIzq;
     private javax.swing.JLabel ImgDer;
     private javax.swing.JLabel ImgIzq;
+    private javax.swing.JLabel JugadorDer;
+    private javax.swing.JLabel JugadorIzq;
     private javax.swing.JLabel NombreDer;
     private javax.swing.JLabel NombreIzq;
     private javax.swing.JProgressBar ProgressBarDer;
     private javax.swing.JProgressBar ProgressBarIzq;
+    private javax.swing.JLabel Stage;
+    private javax.swing.JLabel Vs;
     // End of variables declaration//GEN-END:variables
 }

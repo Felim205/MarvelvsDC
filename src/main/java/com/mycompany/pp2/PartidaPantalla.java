@@ -146,6 +146,11 @@ public class PartidaPantalla extends PantallaMadreMenues {
     
     
     private void abrirJuegoPantalla(Usuario jugador1, Personaje personaje1, Usuario jugador2, Personaje personaje2, Ciudad ciudadElegida) {
+        if (jugador1 == null || personaje1 == null || jugador2 == null || personaje2 == null || ciudadElegida == null) {
+            JOptionPane.showMessageDialog(this, "Falta información para iniciar la partida.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         Date fechaInicio = new Date(); // Obtiene la fecha actual
         int duracion = 0; // Inicializa la duración en 0
 

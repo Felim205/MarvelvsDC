@@ -185,7 +185,7 @@ public class PersonajeManager {
             ));
 
             listaPersonajes.add(new Personaje(
-                "Johnny Storm", calcularFechaNacimiento(1986, 5, 19), "Estados Unidos", "/images/human_torch.png",
+                "Johnny Storm", calcularFechaNacimiento(1986, 5, 19), "Estados Unidos", "/images/humantorch.png",
                 Personaje.TipoPersonaje.HEROE, "Antorcha Humana", "/images/human_torch.png",
                 Personaje.TipoOrigen.META_HUMANO, Personaje.TipoFranquicia.MARVEL,
                 80, 90, 35, 85
@@ -212,122 +212,122 @@ public class PersonajeManager {
                 95, 20, 30, 10
             ));
             listaPersonajes.add(new Personaje(
-            "Edward Nigma", calcularFechaNacimiento(1975, 4, 1), "Estados Unidos", "/images/riddler.png",
-            Personaje.TipoPersonaje.VILLANO, "El Acertijo", "/images/riddler.png",
-            Personaje.TipoOrigen.META_HUMANO, Personaje.TipoFranquicia.DC,
-            1, 1, 1, 1
-            ));
+                "Edward Nigma", calcularFechaNacimiento(1975, 4, 1), "Estados Unidos", "/images/riddler.png",
+                Personaje.TipoPersonaje.VILLANO, "El Acertijo", "/images/riddler.png",
+                Personaje.TipoOrigen.META_HUMANO, Personaje.TipoFranquicia.DC,
+                2, 20, 95, 45
+                ));
 
             listaPersonajes.add(new Personaje(
                 "Peter Quill", calcularFechaNacimiento(1980, 2, 4), "Estados Unidos", "/images/starlord.png",
                 Personaje.TipoPersonaje.HEROE, "Starlord", "/images/starlord.png",
                 Personaje.TipoOrigen.ALIENIGENA, Personaje.TipoFranquicia.MARVEL,
-                1, 1, 1, 1
+                60, 80, 75, 60
             ));
 
             listaPersonajes.add(new Personaje(
                 "Adam Warlock", calcularFechaNacimiento(2000, 1, 1), "Desconocido", "/images/adamwarlock.png",
                 Personaje.TipoPersonaje.HEROE, "Adam Warlock", "/images/adamwarlock.png",
                 Personaje.TipoOrigen.ALIENIGENA, Personaje.TipoFranquicia.MARVEL,
-                1, 1, 1, 1
+                90, 70, 90, 60
             ));
 
             listaPersonajes.add(new Personaje(
                 "Jennifer Walters", calcularFechaNacimiento(1987, 12, 10), "Estados Unidos", "/images/shehulk.png",
                 Personaje.TipoPersonaje.HEROE, "She-Hulk", "/images/shehulk.png",
                 Personaje.TipoOrigen.META_HUMANO, Personaje.TipoFranquicia.MARVEL,
-                1, 1, 1, 1
+                95, 40, 80, 70
             ));
 
             listaPersonajes.add(new Personaje(
                 "Oswald Cobblepot", calcularFechaNacimiento(1970, 9, 15), "Estados Unidos", "/images/penguin.png",
                 Personaje.TipoPersonaje.VILLANO, "El Pingüino", "/images/penguin.png",
                 Personaje.TipoOrigen.META_HUMANO, Personaje.TipoFranquicia.DC,
-                1, 1, 1, 1
+                25, 2, 70, 95
             ));
 
             listaPersonajes.add(new Personaje(
                 "Jean Grey", calcularFechaNacimiento(1985, 11, 4), "Estados Unidos", "/images/jeangrey.png",
                 Personaje.TipoPersonaje.HEROE, "Jean Grey", "/images/jeangrey.png",
                 Personaje.TipoOrigen.MUTANTE, Personaje.TipoFranquicia.MARVEL,
-                1, 1, 1, 1
+                80, 60, 85, 60
             ));
 
             listaPersonajes.add(new Personaje(
                 "Scott Summers", calcularFechaNacimiento(1986, 9, 15), "Estados Unidos", "/images/cyclops.png",
                 Personaje.TipoPersonaje.HEROE, "Cyclops", "/images/cyclops.png",
                 Personaje.TipoOrigen.MUTANTE, Personaje.TipoFranquicia.MARVEL,
-                1, 1, 1, 1
+                70, 60, 70, 60
             ));
 
             listaPersonajes.add(new Personaje(
                 "Kara Zor-El", calcularFechaNacimiento(1995, 5, 15), "Estados Unidos", "/images/supergirl.png",
                 Personaje.TipoPersonaje.HEROE, "SuperGirl", "/images/supergirl.png",
                 Personaje.TipoOrigen.ALIENIGENA, Personaje.TipoFranquicia.DC,
-                1, 1, 1, 1
+                95, 90, 75, 60
             ));
 
             listaPersonajes.add(new Personaje(
                 "Miles Morales", calcularFechaNacimiento(2002, 8, 13), "Estados Unidos", "/images/milesmorales.png",
                 Personaje.TipoPersonaje.HEROE, "Spider-Man (Miles Morales)", "/images/milesmorales.png",
                 Personaje.TipoOrigen.META_HUMANO, Personaje.TipoFranquicia.MARVEL,
-                1, 1, 1, 1
+                90, 85, 75, 20
             ));
 
             listaPersonajes.add(new Personaje(
                 "Susan Storm", calcularFechaNacimiento(1985, 7, 14), "Estados Unidos", "/images/invisiblewoman.png",
                 Personaje.TipoPersonaje.HEROE, "La Mujer Invisible", "/images/invisiblewoman.png",
                 Personaje.TipoOrigen.META_HUMANO, Personaje.TipoFranquicia.MARVEL,
-                1, 1, 1, 1
+                60, 60, 80, 90
             ));
 
             listaPersonajes.add(new Personaje(
                 "Eddie Brock", calcularFechaNacimiento(1973, 6, 18), "Estados Unidos", "/images/venom.png",
                 Personaje.TipoPersonaje.VILLANO, "Venom", "/images/venom.png",
                 Personaje.TipoOrigen.ALIENIGENA, Personaje.TipoFranquicia.MARVEL,
-                1, 1, 1, 1
+                90, 65, 60, 25
             ));
 
             listaPersonajes.add(new Personaje(
                 "Anna Marie", calcularFechaNacimiento(1982, 4, 5), "Estados Unidos", "/images/rogue.png",
                 Personaje.TipoPersonaje.HEROE, "Rogue", "/images/rogue.png",
                 Personaje.TipoOrigen.MUTANTE, Personaje.TipoFranquicia.MARVEL,
-                1, 1, 1, 1
+                85, 60, 75, 60
             ));
 
             listaPersonajes.add(new Personaje(
                 "Remy LeBeau", calcularFechaNacimiento(1980, 8, 20), "Estados Unidos", "/images/gambit.png",
                 Personaje.TipoPersonaje.HEROE, "Gambit", "/images/gambit.png",
                 Personaje.TipoOrigen.MUTANTE, Personaje.TipoFranquicia.MARVEL,
-                1, 1, 1, 1
+                70, 65, 80, 60
             ));
 
             listaPersonajes.add(new Personaje(
                 "Norman Osborn", calcularFechaNacimiento(1965, 10, 10), "Estados Unidos", "/images/greengoblin.png",
                 Personaje.TipoPersonaje.VILLANO, "El Duende Verde", "/images/greengoblin.png",
                 Personaje.TipoOrigen.META_HUMANO, Personaje.TipoFranquicia.MARVEL,
-                1, 1, 1, 1
+                88, 70, 85, 100
             ));
 
             listaPersonajes.add(new Personaje(
                 "Ultron", calcularFechaNacimiento(2000, 1, 1), "Desconocido", "/images/ultron.png",
                 Personaje.TipoPersonaje.VILLANO, "Ultron", "/images/ultron.png",
                 Personaje.TipoOrigen.META_HUMANO, Personaje.TipoFranquicia.MARVEL,
-                1, 1, 1, 1
+                80, 60, 100, 90
             ));
 
             listaPersonajes.add(new Personaje(
                 "Kent Nelson", calcularFechaNacimiento(1928, 3, 21), "Estados Unidos", "/images/drfate.png",
                 Personaje.TipoPersonaje.HEROE, "Dr. Fate", "/images/drfate.png",
                 Personaje.TipoOrigen.META_HUMANO, Personaje.TipoFranquicia.DC,
-                1, 1, 1, 1
+                85, 65, 95, 65
             ));
 
             listaPersonajes.add(new Personaje(
                 "Natasha Romanoff", calcularFechaNacimiento(1984, 11, 22), "Rusia", "/images/blackwidow.png",
                 Personaje.TipoPersonaje.HEROE, "Black Widow", "/images/blackwidow.png",
                 Personaje.TipoOrigen.META_HUMANO, Personaje.TipoFranquicia.MARVEL,
-                1, 1, 1, 1
+                65, 80, 85, 70
             ));
             guardarPersonajes();
         }

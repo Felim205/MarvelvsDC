@@ -73,7 +73,12 @@ public class Personaje extends Persona {
             return nombre;
         }
     }
-
+    
+    public int calcularVida() {
+    // Fórmula para calcular la vida basada en los atributos del personaje
+    return (int) ((fuerza * 0.4) + (velocidad * 0.2) + (inteligencia * 0.2) + (recursosEconomicos * 0.2));
+    }
+    
     // Constructor vacío
     public Personaje() {
         super();
