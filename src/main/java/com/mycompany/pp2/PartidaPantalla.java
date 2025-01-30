@@ -41,26 +41,23 @@ public class PartidaPantalla extends PantallaMadreMenues {
      * Permite a la GUI abrir la pantalla Usuarios, cerrándo la pantalla pasada
      */   
     
-    private void seleccionarJugadores() {
+    private void seleccionarJugadoresYAbrirJuego() {
+        // Obtener listas
         List<Usuario> listaUsuarios = UsuarioManager.getListaUsuarios();
         List<Personaje> listaPersonajes = PersonajeManager.getListaPersonajes();
-        List<Ciudad> listaCiudades = CiudadManager.getListaCiudades(); // Se obtiene la lista de objetos Ciudad
+        List<Ciudad> listaCiudades = CiudadManager.getListaCiudades(); // Obtener lista de ciudades
 
-        // Extraer solo los nombres de las ciudades
-        List<String> nombresCiudades = listaCiudades.stream()
-                .map(Ciudad::getCuidad) // Obtiene solo el nombre de la ciudad
-                .collect(Collectors.toList());
-
-        // Validar si hay suficientes elementos para jugar
+        // Verificar si hay suficientes elementos
         int usuariosFaltantes = 2 - listaUsuarios.size();
         int personajesFaltantes = 1 - listaPersonajes.size();
-        boolean noHayCiudades = nombresCiudades.isEmpty();
+        int ciudadesFaltantes = listaCiudades.isEmpty() ? 1 : 0;
 
-        if (usuariosFaltantes > 0 || personajesFaltantes > 0 || noHayCiudades) {
+        if (usuariosFaltantes > 0 || personajesFaltantes > 0 || ciudadesFaltantes > 0) {
             String mensajeError = "No se puede iniciar la partida:\n";
             if (usuariosFaltantes > 0) mensajeError += "- Faltan " + usuariosFaltantes + " usuario(s).\n";
             if (personajesFaltantes > 0) mensajeError += "- No hay personajes creados.\n";
-            if (noHayCiudades) mensajeError += "- No hay ciudades disponibles.\n";
+            if (ciudadesFaltantes > 0) mensajeError += "- No hay ciudades creadas.\n";
+
             JOptionPane.showMessageDialog(this, mensajeError, "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -69,44 +66,41 @@ public class PartidaPantalla extends PantallaMadreMenues {
         Usuario jugador2Usuario = null;
         Personaje jugador1Personaje = null;
         Personaje jugador2Personaje = null;
-        String ciudadSeleccionada = null;
 
         for (int i = 1; i <= 2; i++) {
+            // Crear JComboBox para usuarios (evitar selección repetida)
             JComboBox<String> comboUsuarios = new JComboBox<>();
             for (Usuario usuario : listaUsuarios) {
-                if (i == 1 || !usuario.equals(jugador1Usuario)) {
+                if (i == 1 || !usuario.equals(jugador1Usuario)) { 
                     comboUsuarios.addItem(usuario.getUserName());
                 }
             }
 
+            // Crear JComboBox para personajes (se pueden repetir)
             JComboBox<String> comboPersonajes = new JComboBox<>();
             for (Personaje personaje : listaPersonajes) {
                 comboPersonajes.addItem(personaje.getPseudonimo());
             }
 
+            // Crear el panel para el popup
             JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
             panel.add(new JLabel("Selecciona un Usuario:"));
             panel.add(comboUsuarios);
             panel.add(new JLabel("Selecciona un Personaje:"));
             panel.add(comboPersonajes);
 
-            int result = JOptionPane.showConfirmDialog(this, panel, 
-                "Seleccionar Jugador " + i, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            int result = JOptionPane.showConfirmDialog(this, panel, "Seleccionar Jugador " + i, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
             if (result == JOptionPane.CANCEL_OPTION || result == JOptionPane.CLOSED_OPTION) {
-                return; // Salir si se cancela
+                return;
             }
 
+            // Obtener selecciones
             String usuarioSeleccionado = (String) comboUsuarios.getSelectedItem();
             String personajeSeleccionado = (String) comboPersonajes.getSelectedItem();
 
-            Usuario usuarioElegido = listaUsuarios.stream()
-                .filter(u -> u.getUserName().equals(usuarioSeleccionado))
-                .findFirst().orElse(null);
-
-            Personaje personajeElegido = listaPersonajes.stream()
-                .filter(p -> p.getPseudonimo().equals(personajeSeleccionado))
-                .findFirst().orElse(null);
+            Usuario usuarioElegido = listaUsuarios.stream().filter(u -> u.getUserName().equals(usuarioSeleccionado)).findFirst().orElse(null);
+            Personaje personajeElegido = listaPersonajes.stream().filter(p -> p.getPseudonimo().equals(personajeSeleccionado)).findFirst().orElse(null);
 
             if (usuarioElegido == null || personajeElegido == null) {
                 JOptionPane.showMessageDialog(this, "Error al seleccionar usuario o personaje.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -122,29 +116,43 @@ public class PartidaPantalla extends PantallaMadreMenues {
             }
         }
 
-        // Ahora se selecciona la ciudad
+        // Selección de la Ciudad
         JComboBox<String> comboCiudades = new JComboBox<>();
-        for (String ciudad : nombresCiudades) {
-            comboCiudades.addItem(ciudad);
+        for (Ciudad ciudad : listaCiudades) {
+            comboCiudades.addItem(ciudad.getCuidad());
         }
 
-        JPanel ciudadPanel = new JPanel(new GridLayout(0, 2, 10, 10));
-        ciudadPanel.add(new JLabel("Selecciona una Ciudad:"));
-        ciudadPanel.add(comboCiudades);
+        JPanel panelCiudad = new JPanel(new GridLayout(0, 2, 10, 10));
+        panelCiudad.add(new JLabel("Selecciona una Ciudad:"));
+        panelCiudad.add(comboCiudades);
 
-        int ciudadResult = JOptionPane.showConfirmDialog(this, ciudadPanel, 
-            "Seleccionar Ciudad", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-        if (ciudadResult == JOptionPane.CANCEL_OPTION || ciudadResult == JOptionPane.CLOSED_OPTION) {
-            return; // Salir si se cancela la selección de ciudad
+        int resultadoCiudad = JOptionPane.showConfirmDialog(this, panelCiudad, "Seleccionar Ciudad", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (resultadoCiudad == JOptionPane.CANCEL_OPTION || resultadoCiudad == JOptionPane.CLOSED_OPTION) {
+            return;
         }
 
-        ciudadSeleccionada = (String) comboCiudades.getSelectedItem();
+        // Obtener la ciudad seleccionada
+        String ciudadSeleccionada = (String) comboCiudades.getSelectedItem();
+        Ciudad ciudadElegida = listaCiudades.stream().filter(c -> c.getCuidad().equals(ciudadSeleccionada)).findFirst().orElse(null);
 
-        // 📌 Mostramos en consola la selección para depuración.
-        System.out.println("Jugador 1: " + jugador1Usuario.getUserName() + " con " + jugador1Personaje.getPseudonimo());
-        System.out.println("Jugador 2: " + jugador2Usuario.getUserName() + " con " + jugador2Personaje.getPseudonimo());
-        System.out.println("Escenario elegido: " + ciudadSeleccionada);
+        if (ciudadElegida == null) {
+            JOptionPane.showMessageDialog(this, "Error al seleccionar la ciudad.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Llamar a abrirJuegoPantalla con la ciudad incluida
+        abrirJuegoPantalla(jugador1Usuario, jugador1Personaje, jugador2Usuario, jugador2Personaje, ciudadElegida);
+    }
+    
+    
+    private void abrirJuegoPantalla(Usuario jugador1, Personaje personaje1, Usuario jugador2, Personaje personaje2, Ciudad ciudadElegida) {
+        Date fechaInicio = new Date(); // Obtiene la fecha actual
+        int duracion = 0; // Inicializa la duración en 0
+
+        // Crear instancia de PantallaJuego con los valores elegidos
+        PantallaJuego juego = new PantallaJuego(jugador1, personaje1, jugador2, personaje2, ciudadElegida, fechaInicio, duracion);
+        juego.setVisible(true);
+        this.dispose(); // Cierra la pantalla actual
     }
     
     /**
@@ -225,7 +233,7 @@ public class PartidaPantalla extends PantallaMadreMenues {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JugarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JugarBtnActionPerformed
-        seleccionarJugadores();
+        seleccionarJugadoresYAbrirJuego();
     }//GEN-LAST:event_JugarBtnActionPerformed
 
     private void ActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ActualizarActionPerformed

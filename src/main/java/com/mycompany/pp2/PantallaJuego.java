@@ -2,29 +2,49 @@ package com.mycompany.pp2;
 
 import static com.mycompany.pp2.PantallaMadre.imageStretcher;
 import static com.mycompany.pp2.PantallaMadre.setCustomIcon;
+import com.mycompany.pp2.clases.Ciudad;
 import com.mycompany.pp2.clases.Heroe;
 import com.mycompany.pp2.clases.Personaje;
 import com.mycompany.pp2.clases.Villano;
 import com.mycompany.pp2.clases.Antiheroe;
+import com.mycompany.pp2.clases.Usuario;
 import java.awt.Color;
 import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
- *
+ * Clase que representa la pantalla del juego.
  * @author gabob
  */
 public class PantallaJuego extends PantallaMadre {
-    private Personaje personajeIzq;
-    private Personaje personajeDer;
+    private Usuario jugador1;
+    private Usuario jugador2;
+    private Personaje personaje1;
+    private Personaje personaje2;
+    private Ciudad ciudad;
+    private Date fechaInicio;
+    private int duracion;
+
     /**
-     * Creates new form PantallaMadre
+     * Constructor de PantallaJuego.
+     * @param jugador1 Usuario del primer jugador
+     * @param personaje1 Personaje seleccionado por el primer jugador
+     * @param jugador2 Usuario del segundo jugador
+     * @param personaje2 Personaje seleccionado por el segundo jugador
+     * @param ciudad Ciudad donde se desarrolla la partida
+     * @param fechaInicio Fecha de inicio de la partida
+     * @param duracion Duración inicializada en 0
      */
-    public PantallaJuego(Personaje personajeIzq, Personaje personajeDer) {
-        this.personajeIzq = personajeIzq;
-        this.personajeDer = personajeDer;
-        
+    public PantallaJuego(Usuario jugador1, Personaje personaje1, Usuario jugador2, Personaje personaje2, Ciudad ciudad, Date fechaInicio, int duracion) {
+        this.jugador1 = jugador1;
+        this.personaje1 = personaje1;
+        this.jugador2 = jugador2;
+        this.personaje2 = personaje2;
+        this.ciudad = ciudad;
+        this.fechaInicio = fechaInicio;
+        this.duracion = duracion;
+
         initComponents();
         personalizarPantalla();
         setCustomIcon(this, "images/MvDCicon.png");
@@ -34,38 +54,53 @@ public class PantallaJuego extends PantallaMadre {
         actualizarPantalla();
     }
 
+    /**
+     * Actualiza la interfaz gráfica con la información de los personajes.
+     */
     private void actualizarPantalla() {
-        NombreIzq.setText(personajeIzq.getPseudonimo());
-        NombreDer.setText(personajeDer.getPseudonimo());
+        NombreIzq.setText(personaje1.getPseudonimo());
+        NombreDer.setText(personaje2.getPseudonimo());
 
-        ImgIzq.setIcon(new ImageIcon(getClass().getResource(personajeIzq.getFotografia())));
-        ImgDer.setIcon(new ImageIcon(getClass().getResource(personajeDer.getFotografia())));
+        ImgIzq.setIcon(new ImageIcon(getClass().getResource(personaje1.getFotografia())));
+        ImgDer.setIcon(new ImageIcon(getClass().getResource(personaje2.getFotografia())));
 
-        ProgressBarIzq.setValue(((Heroe) personajeIzq).getVidaPorcentaje());
-        ProgressBarDer.setValue(((Villano) personajeDer).getVidaPorcentaje());
+        if (personaje1 instanceof Heroe) {
+            ProgressBarIzq.setValue(((Heroe) personaje1).getVidaPorcentaje());
+        } else if (personaje1 instanceof Villano) {
+            ProgressBarIzq.setValue(((Villano) personaje1).getVidaPorcentaje());
+        } else if (personaje1 instanceof Antiheroe) {
+            ProgressBarIzq.setValue(((Antiheroe) personaje1).getVidaPorcentaje());
+        }
+
+        if (personaje2 instanceof Heroe) {
+            ProgressBarDer.setValue(((Heroe) personaje2).getVidaPorcentaje());
+        } else if (personaje2 instanceof Villano) {
+            ProgressBarDer.setValue(((Villano) personaje2).getVidaPorcentaje());
+        } else if (personaje2 instanceof Antiheroe) {
+            ProgressBarDer.setValue(((Antiheroe) personaje2).getVidaPorcentaje());
+        }
     }
     
+    /**
+     * Verifica si el juego ha terminado y muestra el ganador.
+     */
     private void verificarFinDeJuego() {
-        if (((Heroe) personajeIzq).getVida() <= 0) {
-            JOptionPane.showMessageDialog(this, personajeDer.getPseudonimo() + " ha ganado!");
+        if (personaje1 instanceof Heroe && ((Heroe) personaje1).getVida() <= 0) {
+            JOptionPane.showMessageDialog(this, personaje2.getPseudonimo() + " ha ganado!");
             this.dispose();
-        } else if (((Villano) personajeDer).getVida() <= 0) {
-            JOptionPane.showMessageDialog(this, personajeIzq.getPseudonimo() + " ha ganado!");
+        } else if (personaje2 instanceof Villano && ((Villano) personaje2).getVida() <= 0) {
+            JOptionPane.showMessageDialog(this, personaje1.getPseudonimo() + " ha ganado!");
             this.dispose();
         }
     }
     
+    /**
+     * Personaliza la apariencia de la pantalla.
+     */
     private void personalizarPantalla() {
-        // Cambiar el título de la ventana
         setTitle("Partida en progreso... - MARVEL VS DC");
-
     }
     
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -133,29 +168,23 @@ public class PantallaJuego extends PantallaMadre {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnIzqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnIzqActionPerformed
-        if (personajeDer instanceof Heroe) {
-            ((Heroe) personajeDer).recibirAtaque(personajeIzq);
-            ProgressBarDer.setValue(((Heroe) personajeDer).getVidaPorcentaje());
-        } else if (personajeDer instanceof Villano) {
-            ((Villano) personajeDer).recibirAtaque(personajeIzq);
-            ProgressBarDer.setValue(((Villano) personajeDer).getVidaPorcentaje());
-        } else if (personajeDer instanceof Antiheroe) {
-            ((Antiheroe) personajeDer).recibirAtaque(personajeIzq);
-            ProgressBarDer.setValue(((Antiheroe) personajeDer).getVidaPorcentaje());
+        if (personaje2 instanceof Heroe) {
+            ((Heroe) personaje2).recibirAtaque(personaje1);
+            ProgressBarDer.setValue(((Heroe) personaje2).getVidaPorcentaje());
+        } else if (personaje2 instanceof Villano) {
+            ((Villano) personaje2).recibirAtaque(personaje1);
+            ProgressBarDer.setValue(((Villano) personaje2).getVidaPorcentaje());
         }
         verificarFinDeJuego();
     }//GEN-LAST:event_BtnIzqActionPerformed
 
     private void BtnDerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDerActionPerformed
-        if (personajeIzq instanceof Heroe) {
-            ((Heroe) personajeIzq).recibirAtaque(personajeDer);
-            ProgressBarIzq.setValue(((Heroe) personajeIzq).getVidaPorcentaje());
-        } else if (personajeIzq instanceof Villano) {
-            ((Villano) personajeIzq).recibirAtaque(personajeDer);
-            ProgressBarIzq.setValue(((Villano) personajeIzq).getVidaPorcentaje());
-        } else if (personajeIzq instanceof Antiheroe) {
-            ((Antiheroe) personajeIzq).recibirAtaque(personajeDer);
-            ProgressBarIzq.setValue(((Antiheroe) personajeIzq).getVidaPorcentaje());
+        if (personaje1 instanceof Heroe) {
+            ((Heroe) personaje1).recibirAtaque(personaje2);
+            ProgressBarIzq.setValue(((Heroe) personaje1).getVidaPorcentaje());
+        } else if (personaje1 instanceof Villano) {
+            ((Villano) personaje1).recibirAtaque(personaje2);
+            ProgressBarIzq.setValue(((Villano) personaje1).getVidaPorcentaje());
         }
         verificarFinDeJuego();
     }//GEN-LAST:event_BtnDerActionPerformed
@@ -164,31 +193,6 @@ public class PantallaJuego extends PantallaMadre {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PantallaJuego.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PantallaJuego.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PantallaJuego.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PantallaJuego.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        
-        // Crear personajes de prueba para iniciar el juego
         Personaje personaje1 = new Heroe("Batman", new Date(), "Gotham", "/images/batman.png",
                 Personaje.TipoPersonaje.HEROE, "Batman", "/images/batman.png", 
                 Personaje.TipoOrigen.META_HUMANO, Personaje.TipoFranquicia.DC, 
@@ -200,11 +204,7 @@ public class PantallaJuego extends PantallaMadre {
                 75, 65, 90, 50);
 
         java.awt.EventQueue.invokeLater(() -> {
-            new PantallaJuego(personaje1, personaje2).setVisible(true);
-        });
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new PantallaJuego(personaje1, personaje2).setVisible(true);
+            new PantallaJuego(null, personaje1, null, personaje2, null, new Date(), 0).setVisible(true);
         });
     }
     
