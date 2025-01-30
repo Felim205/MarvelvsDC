@@ -4,19 +4,19 @@
  */
 package com.mycompany.pp2.clases;
 
-
-
 import com.mycompany.pp2.clases.Personaje;
+
 import java.util.Date;
+import java.util.Random;
 
 public class Villano extends Personaje {
+    private double vida = 100;
+    private Random random = new Random();
 
-    // Constructor vacío
     public Villano() {
         super();
     }
 
-    // Constructor con parámetros
     public Villano(String nombre, Date fechaNacimiento, String paisResidencia, String foto,
                    TipoPersonaje personaje, String pseudonimo, String fotografia, TipoOrigen origen,
                    TipoFranquicia franquicia, double fuerza, double velocidad, double inteligencia,
@@ -25,7 +25,28 @@ public class Villano extends Personaje {
                 fuerza, velocidad, inteligencia, recursosEconomicos);
     }
 
-    // Método toString
+    public boolean esquivarAtaque() {
+        double probabilidadEsquivar = (getInteligencia() * getVelocidad()) / 100;
+        double randomValue = random.nextDouble() * 100;
+        return randomValue <= probabilidadEsquivar;
+    }
+
+    public void recibirAtaque(Personaje atacante) {
+        if (!esquivarAtaque()) {
+            double daño = atacante.calcularAtaque();
+            vida -= daño;
+            if (vida < 0) vida = 0;
+        }
+    }
+
+    public int getVidaPorcentaje() {
+        return (int) vida;
+    }
+
+    public double getVida() {
+        return vida;
+    }
+
     @Override
     public String toString() {
         return "Villano{} " + super.toString();
