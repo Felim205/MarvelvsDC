@@ -174,6 +174,11 @@ public class Personaje extends Persona {
         return (int) (fuerza + velocidad + inteligencia + recursosEconomicos);
     }
 
+    // Método para calcular el daño de ataque
+    public double calcularAtaque() {
+        return (getFuerza() * getRecursosEconomicos()) / 100;
+    }
+
     // Método toString
     @Override
     public String toString() {
