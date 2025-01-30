@@ -114,6 +114,7 @@ public class CiudadPantalla extends PantallaMadreMenues {
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 770, 360));
 
+        AgregarBtn.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 14)); // NOI18N
         AgregarBtn.setText("Agregar");
         AgregarBtn.setToolTipText("");
         AgregarBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -123,6 +124,7 @@ public class CiudadPantalla extends PantallaMadreMenues {
         });
         getContentPane().add(AgregarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 480, 170, 40));
 
+        EditarBtn.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 14)); // NOI18N
         EditarBtn.setText("Editar");
         EditarBtn.setToolTipText("");
         EditarBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -132,6 +134,7 @@ public class CiudadPantalla extends PantallaMadreMenues {
         });
         getContentPane().add(EditarBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 480, 170, 40));
 
+        EliminarBtn.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 14)); // NOI18N
         EliminarBtn.setText("Eliminar");
         EliminarBtn.setToolTipText("");
         EliminarBtn.addActionListener(new java.awt.event.ActionListener() {
