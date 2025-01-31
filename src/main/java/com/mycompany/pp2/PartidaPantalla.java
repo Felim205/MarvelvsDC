@@ -119,7 +119,7 @@ public class PartidaPantalla extends PantallaMadreMenues {
         // Selección de la Ciudad
         JComboBox<String> comboCiudades = new JComboBox<>();
         for (Ciudad ciudad : listaCiudades) {
-            comboCiudades.addItem(ciudad.getCiudad());
+            comboCiudades.addItem(ciudad.getCuidad());
         }
 
         JPanel panelCiudad = new JPanel(new GridLayout(0, 2, 10, 10));
@@ -133,7 +133,7 @@ public class PartidaPantalla extends PantallaMadreMenues {
 
         // Obtener la ciudad seleccionada
         String ciudadSeleccionada = (String) comboCiudades.getSelectedItem();
-        Ciudad ciudadElegida = listaCiudades.stream().filter(c -> c.getCiudad().equals(ciudadSeleccionada)).findFirst().orElse(null);
+        Ciudad ciudadElegida = listaCiudades.stream().filter(c -> c.getCuidad().equals(ciudadSeleccionada)).findFirst().orElse(null);
 
         if (ciudadElegida == null) {
             JOptionPane.showMessageDialog(this, "Error al seleccionar la ciudad.", "Error", JOptionPane.ERROR_MESSAGE);

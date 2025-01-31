@@ -72,7 +72,7 @@ public class PantallaJuego extends PantallaMadre {
             JugadorIzq.setText(jugador1.getUserName());
             JugadorDer.setText(jugador2.getUserName());
 
-            Stage.setText("-" + ciudad.getCiudad() + "-");
+            Stage.setText("-" + ciudad.getCuidad() + "-");
 
             setImagenEscalada(ImgIzq, personaje1.getFotografia());
             setImagenEscalada(ImgDer, personaje2.getFotografia());
