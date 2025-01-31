@@ -161,7 +161,7 @@ public class PantallaJuego extends PantallaMadre {
         getContentPane().add(Stage, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 10, -1, -1));
 
         Vs.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/vs.png"))); // NOI18N
-        getContentPane().add(Vs, new org.netbeans.lib.awtextra.AbsoluteConstraints(407, 196, 110, 120));
+        getContentPane().add(Vs, new org.netbeans.lib.awtextra.AbsoluteConstraints(327, 126, 290, 290));
 
         JugadorIzq.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
         JugadorIzq.setText("Jugador 1");
@@ -171,12 +171,12 @@ public class PantallaJuego extends PantallaMadre {
         NombreIzq.setText("Personaje 1");
         getContentPane().add(NombreIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, -1, -1));
 
-        ImgIzq.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Ornstein.png"))); // NOI18N
+        ImgIzq.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/default.png"))); // NOI18N
         ImgIzq.setText("jLabel2");
         getContentPane().add(ImgIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, 270, 430));
 
         BtnIzq.setBackground(new java.awt.Color(53, 152, 155));
-        BtnIzq.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 14)); // NOI18N
+        BtnIzq.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 16)); // NOI18N
         BtnIzq.setForeground(new java.awt.Color(51, 51, 51));
         BtnIzq.setText("Atacar");
         BtnIzq.addActionListener(new java.awt.event.ActionListener() {
@@ -184,7 +184,7 @@ public class PantallaJuego extends PantallaMadre {
                 BtnIzqActionPerformed(evt);
             }
         });
-        getContentPane().add(BtnIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 470, 100, 40));
+        getContentPane().add(BtnIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 470, 110, 40));
         getContentPane().add(ProgressBarIzq, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 110, -1, 10));
 
         JugadorDer.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
@@ -192,15 +192,15 @@ public class PantallaJuego extends PantallaMadre {
         getContentPane().add(JugadorDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 10, -1, -1));
 
         NombreDer.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 26)); // NOI18N
-        NombreDer.setText("Spider-Man");
+        NombreDer.setText("Personaje 2");
         getContentPane().add(NombreDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 70, -1, -1));
 
-        ImgDer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Smough.png"))); // NOI18N
+        ImgDer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/default.png"))); // NOI18N
         ImgDer.setText("jLabel2");
         getContentPane().add(ImgDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 120, 270, 430));
 
         BtnDer.setBackground(new java.awt.Color(227, 150, 92));
-        BtnDer.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 14)); // NOI18N
+        BtnDer.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 16)); // NOI18N
         BtnDer.setForeground(new java.awt.Color(51, 51, 51));
         BtnDer.setText("Atacar");
         BtnDer.addActionListener(new java.awt.event.ActionListener() {
@@ -208,7 +208,7 @@ public class PantallaJuego extends PantallaMadre {
                 BtnDerActionPerformed(evt);
             }
         });
-        getContentPane().add(BtnDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 470, 100, 40));
+        getContentPane().add(BtnDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 470, 110, 40));
         getContentPane().add(ProgressBarDer, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 110, -1, 10));
 
         Background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/BgJuego.png"))); // NOI18N
