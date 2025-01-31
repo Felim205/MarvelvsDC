@@ -9,7 +9,7 @@ import java.util.Date;
  */
 public class Partida implements Serializable {
     private static int contadorPartidas = 1; // Controla el ID de cada partida
-    private final String idPartida;
+    private String idPartida;
     private final String fecha; // Formato DD/MM/YYYY
     private int turnos; // Contador de turnos en la partida
     private String participantes;
@@ -84,6 +84,10 @@ public class Partida implements Serializable {
         this.descripcion = descripcion;
     }
 
+
+    public void setIdPartida(String idPartida) {
+        this.idPartida = idPartida;
+    }
     @Override
     public String toString() {
         return "Partida{" +

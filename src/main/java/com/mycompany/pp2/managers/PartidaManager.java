@@ -17,6 +17,12 @@ public class PartidaManager {
     }
 
     public static void agregarPartida(Partida partida) {
+        List<Partida> partidas = getListaPartidas(); // Asegura que esté cargado
+
+        // 📌 Obtener el último ID de partida registrado y generar el siguiente en orden
+        int nuevoId = partidas.isEmpty() ? 1 : partidas.size() + 1;
+        partida.setIdPartida(String.format("%03d", nuevoId)); // Asigna ID en formato "001", "002", etc.
+
         listaPartidas.add(partida);
         guardarPartidas();
     }

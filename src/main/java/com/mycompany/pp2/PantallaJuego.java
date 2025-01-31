@@ -7,11 +7,15 @@ import com.mycompany.pp2.clases.Heroe;
 import com.mycompany.pp2.clases.Personaje;
 import com.mycompany.pp2.clases.Villano;
 import com.mycompany.pp2.clases.Antiheroe;
+import com.mycompany.pp2.clases.Partida;
 import com.mycompany.pp2.clases.Usuario;
+import com.mycompany.pp2.managers.PartidaManager;
 import com.mycompany.pp2.managers.SonidoManager;
 import java.awt.Color;
 import java.awt.Image;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -98,13 +102,8 @@ public class PantallaJuego extends PantallaMadre {
      * Actualiza el turno y habilita/deshabilita los botones de ataque.
      */
     private void actualizarTurno() {
-        if (turnoJugador1) {
-            BtnIzq.setEnabled(true);  
-            BtnDer.setEnabled(false); 
-        } else {
-            BtnIzq.setEnabled(false); 
-            BtnDer.setEnabled(true);  
-        }
+        BtnIzq.setEnabled(turnoJugador1);
+        BtnDer.setEnabled(!turnoJugador1);
     }
     
     /**
@@ -137,16 +136,15 @@ public class PantallaJuego extends PantallaMadre {
 
             String ganador = (vida1 <= 0) ? personaje2.getPseudonimo() : personaje1.getPseudonimo();
             System.out.println(ganador + " GANA LA PARTIDA! ");
-            historialPartida.append("🎉 ").append(personaje2.getPseudonimo()).append(" GANA LA PARTIDA! 🎉\n");
+            historialPartida.append(personaje2.getPseudonimo()).append(" GANA LA PARTIDA! 🎉\n");
 
-            System.out.println("📝 Historial de la partida:\n" + historialPartida.toString());
+            System.out.println("Historial de la partida:\n" + historialPartida.toString());
+            
+            registrarPartida(ganador);
             
             // Crear opciones personalizadas
             Object[] opciones = {"Volver a Jugar", "Volver al Menú Principal"};
-            int seleccion = JOptionPane.showOptionDialog(
-                this,
-                ganador + " ha ganado! 🏆",
-                "Fin del Juego",
+            int seleccion = JOptionPane.showOptionDialog(this, ganador + " ha ganado! 🏆", "Fin del Juego",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.INFORMATION_MESSAGE,
                 null,
@@ -187,6 +185,43 @@ public class PantallaJuego extends PantallaMadre {
         this.dispose(); // 🔥 Cerrar la pantalla actual
     }
     
+    /**
+     * ✅ Guarda la partida en PartidaManager y abre PartidaPantalla.
+     */
+    private void registrarPartida(String ganador) {
+        List<Partida> partidasExistentes = PartidaManager.getListaPartidas();
+        // Obtiene la cantidad actual de partidas
+        int nuevoId = partidasExistentes.isEmpty() ? 1 : partidasExistentes.size() + 1;
+        String idPartida = String.format("%03d", nuevoId);
+
+        // Obtiene la fecha actual en formato "dd/MM/yyyy"
+        String fecha = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+
+        // Determina el ganador
+        String ganadorUsuario = (ganador.equals(personaje1.getPseudonimo())) ? jugador1.getUserName() : jugador2.getUserName();
+        
+        // Participantes en formato "Jugador1 vs Jugador2"
+        String participantes = jugador1.getUserName() + " vs " + jugador2.getUserName();
+
+        // Se mantiene el rank en 1 por ahora
+        int rank = 1;
+
+        // Obtiene el historial de la partida en formato String
+        String descripcion = historialPartida.toString();
+
+        // ✅ Crear una nueva instancia de Partida con los datos obtenidos
+        Partida nuevaPartida = new Partida(turnosTotales, participantes, ganador, rank, descripcion);
+
+        // ✅ Guardar la partida en PartidaManager
+        PartidaManager.agregarPartida(nuevaPartida);
+
+        // 📜 Imprimir información de la partida en consola
+        System.out.println("Partida registrada correctamente!\n" + nuevaPartida);
+
+        new PartidaPantalla().setVisible(true);
+        this.dispose(); // Cierra la pantalla actual
+    }
+
     /**
      * Personaliza la apariencia de la pantalla.
      */
@@ -306,7 +341,7 @@ public class PantallaJuego extends PantallaMadre {
         System.out.println("Turno " + turnosTotales);
         historialPartida.append("Turno ").append(turnosTotales).append("\n");
         
-        personaje2.recibirAtaque(personaje1, historialPartida);
+        personaje1.recibirAtaque(personaje1, historialPartida);
 
         ataquesJugador2++;
         System.out.println("Ataques realizados - " + jugador2.getUserName() + ": " + ataquesJugador2);

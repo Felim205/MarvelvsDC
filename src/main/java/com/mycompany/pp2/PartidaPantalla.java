@@ -33,6 +33,7 @@ public class PartidaPantalla extends PantallaMadreMenues {
         super();
         initComponents();
         personalizarPantalla();
+        cargarPartidasEnTabla(); 
     }
     
     private void personalizarPantalla() {
@@ -42,25 +43,26 @@ public class PartidaPantalla extends PantallaMadreMenues {
         PartidaBtn.setVisible(false);
     }
     
-    
-     /**
-     * Carga las partidas guardadas en `PartidaManager` y las muestra en la tabla.
+    /**
+     * Carga las partidas guardadas en `PartidaManager` y actualiza la tabla.
      */
     private void cargarPartidasEnTabla() {
         List<Partida> partidas = PartidaManager.getListaPartidas();
         DefaultTableModel model = (DefaultTableModel) ListaPartidas.getModel();
-        model.setRowCount(0); // Limpiar la tabla antes de actualizar
+
+        model.setRowCount(0); // 🔄 Limpiar la tabla antes de actualizar
 
         for (Partida partida : partidas) {
             model.addRow(new Object[]{
                 partida.getIdPartida(),
                 partida.getFecha(),
-                partida.getTurnos(), // Usamos Duración en lugar de Turnos
-                partida.getParticipantes()
+                partida.getTurnos() + " turnos",
+                partida.getParticipantes(),
+                partida.getGanador() // ✅ Asegurarse de incluir el ganador
             });
         }
     }
-    
+
     /**
      * Permite a la GUI abrir la pantalla Usuarios, cerrándo la pantalla pasada
      */   
