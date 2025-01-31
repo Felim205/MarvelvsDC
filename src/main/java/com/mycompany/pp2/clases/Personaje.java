@@ -6,6 +6,7 @@ package com.mycompany.pp2.clases;
 
 
 
+import java.util.Random;
 import java.util.Date;
 
 public class Personaje extends Persona {
@@ -20,6 +21,8 @@ public class Personaje extends Persona {
     protected double velocidad;
     protected double inteligencia;
     protected double recursosEconomicos;
+    
+    private int vidaActual = 100;
     
     
     // Enumeración para Tipo de Personaje
@@ -72,11 +75,6 @@ public class Personaje extends Persona {
         public String getNombre() {
             return nombre;
         }
-    }
-    
-    public int calcularVida() {
-    // Fórmula para calcular la vida basada en los atributos del personaje
-    return (int) ((fuerza * 0.4) + (velocidad * 0.2) + (inteligencia * 0.2) + (recursosEconomicos * 0.2));
     }
     
     // Constructor vacío
@@ -183,6 +181,42 @@ public class Personaje extends Persona {
     public double calcularAtaque() {
         return (getFuerza() * getRecursosEconomicos()) / 100;
     }
+    
+    public boolean esquivarAtaque() {
+        Random random = new Random();
+        double probabilidadEsquivar = (getInteligencia() * getVelocidad()) / 100;
+        double randomValue = random.nextDouble() * 100; // Número entre 0 y 100
+        return randomValue <= probabilidadEsquivar;
+    }
+    
+    public int getVidaActual() {
+        return vidaActual;
+    }
+
+    public void setVidaActual(int nuevaVida) {
+        if (nuevaVida < 0) {
+            vidaActual = 0;
+        } else if (nuevaVida > 100) {
+            vidaActual = 100;
+        } else {
+            vidaActual = nuevaVida;
+        }
+    }
+
+    public void recibirAtaque(Personaje atacante) {
+        System.out.println("⚔ " + getPseudonimo() + " está recibiendo un ataque de " + atacante.getPseudonimo());
+
+        if (!esquivarAtaque()) {
+            int daño = (int) atacante.calcularAtaque();
+            setVidaActual(vidaActual - daño); // ✅ Usamos `setVidaActual()` en vez de calcular manualmente
+
+            System.out.println("🩸 Nueva vida de " + getPseudonimo() + ": " + getVidaActual());
+        } else {
+            System.out.println(getPseudonimo() + " esquivó el ataque!");
+        }
+    }
+    
+
 
     // Método toString
     @Override
