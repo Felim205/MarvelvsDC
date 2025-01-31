@@ -15,7 +15,6 @@ import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.Timer;
 
 /**
  * Clase que representa la pantalla del juego.
@@ -81,7 +80,7 @@ public class PantallaJuego extends PantallaMadre {
             int vida1 = personaje1.getVidaActual();
             int vida2 = personaje2.getVidaActual();
 
-            //System.out.println("📊 ACTUALIZANDO Barra de Vida: " + personaje1.getPseudonimo() + " (" + vida1 + ") - " + personaje2.getPseudonimo() + " (" + vida2 + ")");
+            System.out.println("📊 ACTUALIZANDO Barra de Vida: " + personaje1.getPseudonimo() + " (" + vida1 + ") - " + personaje2.getPseudonimo() + " (" + vida2 + ")");
 
             ProgressBarIzq.setValue(vida1);
             ProgressBarIzq.repaint();
@@ -126,10 +125,9 @@ public class PantallaJuego extends PantallaMadre {
         int vida1 = personaje1.getVidaActual(); 
         int vida2 = personaje2.getVidaActual(); 
 
-        //System.out.println("🛑 Verificando fin del juego...");
+        System.out.println("🛑 Verificando fin del juego...");
         System.out.println("Vida de " + personaje1.getPseudonimo() + ": " + vida1);
         System.out.println("Vida de " + personaje2.getPseudonimo() + ": " + vida2);
-        System.out.println(" ");
 
         if (vida1 <= 0) {
             SonidoManager.playSound("victoria.wav");
@@ -148,6 +146,7 @@ public class PantallaJuego extends PantallaMadre {
         }
     }
 
+    
     /**
      * Personaliza la apariencia de la pantalla.
      */
@@ -241,33 +240,23 @@ public class PantallaJuego extends PantallaMadre {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnIzqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnIzqActionPerformed
-        if (!turnoJugador1) return;
+        if (!turnoJugador1) return; // ✅ Evita ataques fuera de turno
 
-        //System.out.println("➡ Botón IZQUIERDO presionado. " + personaje1.getPseudonimo() + " ataca a " + personaje2.getPseudonimo());
+        System.out.println("➡ Botón IZQUIERDO presionado. " + personaje1.getPseudonimo() + " ataca a " + personaje2.getPseudonimo());
 
-        if (personaje2.esquivarAtaque()) {
-            System.out.println(personaje2.getPseudonimo() + " esquivó el ataque! ⚡");
-        } else {
-            personaje2.recibirAtaque(personaje1);
-        }
-
+        personaje2.recibirAtaque(personaje1);
         actualizarPantalla(); 
         verificarFinDeJuego(); 
     }//GEN-LAST:event_BtnIzqActionPerformed
 
     private void BtnDerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDerActionPerformed
-        if (turnoJugador1) return;
+        if (turnoJugador1) return; // ✅ Evita ataques fuera de turno
 
-        //System.out.println("➡ Botón DERECHO presionado. " + personaje2.getPseudonimo() + " ataca a " + personaje1.getPseudonimo());
+        System.out.println("➡ Botón DERECHO presionado. " + personaje2.getPseudonimo() + " ataca a " + personaje1.getPseudonimo());
 
-        if (personaje1.esquivarAtaque()) {
-            System.out.println(personaje1.getPseudonimo() + " esquivó el ataque! ⚡");
-        } else {
-            personaje1.recibirAtaque(personaje2);
-        }
-
+        personaje1.recibirAtaque(personaje2);
         actualizarPantalla(); 
-        verificarFinDeJuego();
+        verificarFinDeJuego(); 
     }//GEN-LAST:event_BtnDerActionPerformed
 
     /**
