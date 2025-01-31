@@ -193,19 +193,11 @@ public class UsuariosPantalla extends PantallaMadreMenues {
     }//GEN-LAST:event_AgregarBtnActionPerformed
 
     private void EditarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditarBtnActionPerformed
-        int filaSeleccionada = ListaUsuarios.getSelectedRow();
-        if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un usuario para editar.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        Usuario usuario = UsuarioManager.getListaUsuarios().get(filaSeleccionada);
-
-        JTextField txtNombre = new JTextField(usuario.getNombre(), 15);
-        JTextField txtApellidos = new JTextField(usuario.getApellidos(), 15);
-        JTextField txtUserName = new JTextField(usuario.getUserName(), 15);
-        JTextField txtCorreo = new JTextField(usuario.getCorreo(), 15);
-        JPasswordField txtContraseña = new JPasswordField(usuario.getContraseña(), 15);
+        JTextField txtNombre = new JTextField(15);
+        JTextField txtApellidos = new JTextField(15);
+        JTextField txtUserName = new JTextField(15);
+        JTextField txtCorreo = new JTextField(15);
+        JPasswordField txtContraseña = new JPasswordField(15);
 
         JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
         panel.add(new JLabel("Nombre:"));
@@ -219,21 +211,47 @@ public class UsuariosPantalla extends PantallaMadreMenues {
         panel.add(new JLabel("Contraseña:"));
         panel.add(txtContraseña);
 
-        int result = JOptionPane.showConfirmDialog(this, panel, "Editar Usuario", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-        if (result == JOptionPane.OK_OPTION) {
-            try {
-                usuario.setNombre(txtNombre.getText().trim());
-                usuario.setApellidos(txtApellidos.getText().trim());
-                usuario.setUserName(txtUserName.getText().trim());
-                usuario.setCorreo(txtCorreo.getText().trim());
-                usuario.setContraseña(new String(txtContraseña.getPassword()));
-
-                UsuarioManager.editarUsuario(filaSeleccionada, usuario);
-                poblarLaTablaUsuarios();
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        boolean datosValidos = false;
+        while (!datosValidos) {
+            int result = JOptionPane.showConfirmDialog(this, panel, "Agregar Usuario", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            if (result != JOptionPane.OK_OPTION) {
+                return; // Cierra si se cancela sin borrar datos
             }
+
+            String nombre = txtNombre.getText().trim();
+            String apellidos = txtApellidos.getText().trim();
+            String userName = txtUserName.getText().trim();
+            String correo = txtCorreo.getText().trim();
+            String contraseña = new String(txtContraseña.getPassword());
+
+            // Validaciones heredadas
+            if (nombre.isEmpty() || apellidos.isEmpty() || userName.isEmpty() || correo.isEmpty() || contraseña.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Ningún campo puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+                continue;
+            }
+
+            if (nombre.length() > 70 || apellidos.length() > 70) {
+                JOptionPane.showMessageDialog(this, "El nombre o apellido no puede superar los 70 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
+                continue;
+            }
+
+            if (!userName.matches("[a-zA-Z0-9]+")) {
+                JOptionPane.showMessageDialog(this, "El username solo puede contener letras y números.", "Error", JOptionPane.ERROR_MESSAGE);
+                continue;
+            }
+
+            for (Usuario usuario : UsuarioManager.getListaUsuarios()) {
+                if (usuario.getUserName().equalsIgnoreCase(userName)) {
+                    JOptionPane.showMessageDialog(this, "Ya existe un usuario con este username.", "Error", JOptionPane.ERROR_MESSAGE);
+                    continue;
+                }
+            }
+
+            // Crear usuario y agregarlo
+            Usuario nuevoUsuario = new Usuario(nombre, apellidos, userName, correo, contraseña);
+            UsuarioManager.agregarUsuario(nuevoUsuario);
+            poblarLaTablaUsuarios();
+            datosValidos = true;
         }
     }//GEN-LAST:event_EditarBtnActionPerformed
 

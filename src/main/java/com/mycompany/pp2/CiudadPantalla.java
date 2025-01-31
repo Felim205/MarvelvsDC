@@ -166,7 +166,6 @@ public class CiudadPantalla extends PantallaMadreMenues {
             comboPais.addItem(pais.getNombre());
         }
 
-        // Agregar escenarios con nombres formateados
         for (TipoEscenario escenario : TipoEscenario.values()) {
             comboEscenario.addItem(escenario.getNombre());
         }
@@ -188,6 +187,24 @@ public class CiudadPantalla extends PantallaMadreMenues {
             String pais = (String) comboPais.getSelectedItem();
             String estado = txtEstado.getText().trim();
             String escenarioNombre = (String) comboEscenario.getSelectedItem();
+
+            // Validaciones
+            if (nombre.isEmpty() || estado.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacíos.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (nombre.length() > 70) {
+                JOptionPane.showMessageDialog(this, "El nombre de la ciudad no puede superar los 70 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            for (Ciudad ciudad : CiudadManager.getListaCiudades()) {
+                if (ciudad.getCuidad().equalsIgnoreCase(nombre)) {
+                    JOptionPane.showMessageDialog(this, "Ya existe una ciudad con este nombre.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
 
             // Convertir el nombre seleccionado a su respectivo enum
             TipoEscenario escenario = null;
