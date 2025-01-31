@@ -214,6 +214,7 @@ public class Personaje extends Persona {
 
             System.out.println("La vida de " + getPseudonimo() + " es : " + getVidaActual());
             System.out.println(" ");
+            System.out.println("-----------------------------------------");
             SonidoManager.playSound("ataque.wav");
         } else {
             System.out.println(getPseudonimo() + " esquivo el ataque!");

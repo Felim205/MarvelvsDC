@@ -117,39 +117,66 @@ public class PantallaJuego extends PantallaMadre {
     /**
      * Verifica si el juego ha terminado y muestra el ganador.
      */
+/**
+ * ✅ Verifica si el juego ha terminado y muestra la ventana de ganador con opciones.
+ */
     private void verificarFinDeJuego() {
         actualizarPantalla();
 
         int vida1 = personaje1.getVidaActual(); 
         int vida2 = personaje2.getVidaActual(); 
 
-        //System.out.println("🛑 Verificando fin del juego...");
-        System.out.println(" ");
-        System.out.println("Vida de " + personaje1.getPseudonimo() + ": " + vida1);
-        System.out.println("Vida de " + personaje2.getPseudonimo() + ": " + vida2);
-        System.out.println(" --------------------------------------------------- ");
+        if (vida1 <= 0 || vida2 <= 0) {
+            SonidoManager.playSound("victoria.wav"); // 🎵 Sonido de victoria
 
-        if (vida1 <= 0) {
-            SonidoManager.playSound("victoria.wav");
-            System.out.println(" ");
-            System.out.println(" ");
-            JOptionPane.showMessageDialog(this, personaje2.getPseudonimo() + " ha ganado! 🏆", "Fin del juego", JOptionPane.INFORMATION_MESSAGE);
-            System.out.println("🎉 " + personaje2.getPseudonimo() + " GANA LA PARTIDA! 🎉");
-            this.dispose(); 
-        } else if (vida2 <= 0) {
-            SonidoManager.playSound("victoria.wav");
-            System.out.println(" ");
-            System.out.println(" ");
-            JOptionPane.showMessageDialog(this, personaje1.getPseudonimo() + " ha ganado! 🏆", "Fin del juego", JOptionPane.INFORMATION_MESSAGE);
-            System.out.println("🎉 " + personaje1.getPseudonimo() + " GANA LA PARTIDA! 🎉");
-            this.dispose(); 
+            String ganador = (vida1 <= 0) ? personaje2.getPseudonimo() : personaje1.getPseudonimo();
+            System.out.println("🎉 " + ganador + " GANA LA PARTIDA! 🎉");
+
+            // Crear opciones personalizadas
+            Object[] opciones = {"Volver a Jugar", "Volver al Menú Principal"};
+            int seleccion = JOptionPane.showOptionDialog(
+                this,
+                ganador + " ha ganado! 🏆",
+                "Fin del Juego",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                opciones,
+                opciones[0] // Opción por defecto
+            );
+
+            if (seleccion == JOptionPane.YES_OPTION) {
+                reiniciarPartida(); // 🔄 Volver a jugar
+            } else {
+                volverAlMenu(); // 🔙 Volver al menú principal
+            }
         } else {
-            // 🔄 Cambiar el turno SOLO si nadie ha ganado
+            // 🔄 Cambiar el turno si nadie ha ganado
             turnoJugador1 = !turnoJugador1;
-            actualizarTurno(); // ✅ Actualizar botones
+            actualizarTurno();
         }
     }
 
+    /**
+     * 🔄 Reinicia la partida con los mismos jugadores y personajes, restaurando la vida.
+     */
+    private void reiniciarPartida() {
+        // 🔄 Restaurar vida de los personajes antes de reiniciar
+        personaje1.setVidaActual(100);
+        personaje2.setVidaActual(100);
+
+        // 🔥 Crear una nueva instancia de la pantalla de juego
+        new PantallaJuego(jugador1, personaje1, jugador2, personaje2, ciudad, new Date(), 0).setVisible(true);
+        this.dispose(); // 🔥 Cerrar la pantalla actual
+    }
+
+    /**
+     * 🔙 Vuelve al menú principal cerrando la partida actual.
+     */
+    private void volverAlMenu() {
+        new MainMenuPantalla().setVisible(true); // 🔥 Asegúrate de tener esta clase creada
+        this.dispose(); // 🔥 Cerrar la pantalla actual
+    }
     
     /**
      * Personaliza la apariencia de la pantalla.
