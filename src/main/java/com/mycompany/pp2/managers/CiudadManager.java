@@ -13,7 +13,10 @@ public class CiudadManager {
     private static final List<Ciudad> listaCiudades = new ArrayList<>();
 
     static {
-        inicializarCiudades(); // Asegura que siempre haya datos al cargar la clase
+        cargarCiudades(); // Asegura que los datos se carguen correctamente al iniciar
+        if (listaCiudades.isEmpty()) {
+            inicializarCiudades(); // Si el archivo está vacío, inicializa las ciudades
+        }
     }
 
     public static void agregarCiudad(Ciudad ciudad) {
@@ -23,7 +26,7 @@ public class CiudadManager {
 
     public static List<Ciudad> getListaCiudades() {
         if (listaCiudades.isEmpty()) {
-            cargarCiudades(); // Asegura que siempre haya datos
+            cargarCiudades(); // Asegura que los datos se carguen si no han sido cargados previamente
         }
         return listaCiudades;
     }
@@ -45,6 +48,7 @@ public class CiudadManager {
     private static void guardarCiudades() {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(ARCHIVO_CIUDADES))) {
             out.writeObject(listaCiudades);
+            System.out.println("Ciudades guardadas correctamente en " + ARCHIVO_CIUDADES);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -52,16 +56,17 @@ public class CiudadManager {
 
     private static void cargarCiudades() {
         File archivo = new File(ARCHIVO_CIUDADES);
-        if (archivo.exists() && archivo.length() > 0) { 
+        if (archivo.exists() && archivo.length() > 0) {
             try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(ARCHIVO_CIUDADES))) {
                 List<Ciudad> ciudadesCargadas = (List<Ciudad>) in.readObject();
                 listaCiudades.clear(); // Evita duplicados
                 listaCiudades.addAll(ciudadesCargadas);
+                System.out.println("Ciudades cargadas correctamente desde " + ARCHIVO_CIUDADES);
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         } else {
-            inicializarCiudades(); // Si no hay archivo, inicializar
+            System.out.println("No se encontró el archivo de ciudades o está vacío.");
         }
     }
 

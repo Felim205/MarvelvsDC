@@ -16,9 +16,16 @@ import java.util.List;
  * @author gabob
  */
 
+/**
+ * Clase de gestión de personajes
+ */
 public class PersonajeManager {
     private static final String ARCHIVO_PERSONAJES = "personajes.dat";
     private static final List<Personaje> listaPersonajes = new ArrayList<>();
+
+    static {
+        inicializarPersonajes(); // Asegura que siempre haya datos cargados al iniciar
+    }
 
     public static void agregarPersonaje(Personaje personaje) {
         listaPersonajes.add(personaje);
@@ -26,6 +33,9 @@ public class PersonajeManager {
     }
 
     public static List<Personaje> getListaPersonajes() {
+        if (listaPersonajes.isEmpty()) {
+            cargarPersonajes(); // Asegura que siempre haya datos
+        }
         return listaPersonajes;
     }
 
