@@ -3,7 +3,9 @@ package com.mycompany.pp2;
 import com.mycompany.pp2.clases.Personaje;
 import com.mycompany.pp2.clases.Usuario;
 import com.mycompany.pp2.clases.Ciudad;
+import com.mycompany.pp2.clases.Partida;
 import com.mycompany.pp2.managers.CiudadManager;
+import com.mycompany.pp2.managers.PartidaManager;
 import com.mycompany.pp2.managers.PersonajeManager;
 import com.mycompany.pp2.managers.UsuarioManager;
 import java.awt.GridLayout;
@@ -14,6 +16,9 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -37,10 +42,28 @@ public class PartidaPantalla extends PantallaMadreMenues {
         PartidaBtn.setVisible(false);
     }
     
+    
+     /**
+     * Carga las partidas guardadas en `PartidaManager` y las muestra en la tabla.
+     */
+    private void cargarPartidasEnTabla() {
+        List<Partida> partidas = PartidaManager.getListaPartidas();
+        DefaultTableModel model = (DefaultTableModel) ListaPartidas.getModel();
+        model.setRowCount(0); // Limpiar la tabla antes de actualizar
+
+        for (Partida partida : partidas) {
+            model.addRow(new Object[]{
+                partida.getIdPartida(),
+                partida.getFecha(),
+                partida.getTurnos(), // Usamos Duración en lugar de Turnos
+                partida.getParticipantes()
+            });
+        }
+    }
+    
     /**
      * Permite a la GUI abrir la pantalla Usuarios, cerrándo la pantalla pasada
      */   
-    
     private void seleccionarJugadoresYAbrirJuego() {
         // Obtener listas
         List<Usuario> listaUsuarios = UsuarioManager.getListaUsuarios();
@@ -187,17 +210,17 @@ public class PartidaPantalla extends PantallaMadreMenues {
         ListaPartidas.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 12)); // NOI18N
         ListaPartidas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "ID de Partida", "Fecha", "Duración", "Participantes"
+                "ID de Partida", "Fecha", "Duración", "Participantes", "Ganador"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -242,7 +265,36 @@ public class PartidaPantalla extends PantallaMadreMenues {
     }//GEN-LAST:event_JugarBtnActionPerformed
 
     private void ActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ActualizarActionPerformed
+        int filaSeleccionada = ListaPartidas.getSelectedRow();
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione una partida para ver los detalles.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
+        // Obtener la partida seleccionada
+        List<Partida> partidas = PartidaManager.getListaPartidas();
+        Partida partidaSeleccionada = partidas.get(filaSeleccionada);
+
+        // Manejar la descripción larga en un JTextArea dentro de un JScrollPane
+        JTextArea textArea = new JTextArea(10, 40);
+        textArea.setText(partidaSeleccionada.getDescripcion());
+        textArea.setWrapStyleWord(true);
+        textArea.setLineWrap(true);
+        textArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+
+        // Mostrar los detalles de la partida
+        String detalles = "ID: " + partidaSeleccionada.getIdPartida() +
+                          "\nFecha: " + partidaSeleccionada.getFecha() +
+                          "\nDuración: " + partidaSeleccionada.getTurnos() + " turnos" + 
+                          "\nParticipantes: " + partidaSeleccionada.getParticipantes();
+
+        JPanel panel = new JPanel(new GridLayout(0, 1, 10, 10));
+        panel.add(new JLabel(detalles));
+        panel.add(new JLabel("Descripción:"));
+        panel.add(scrollPane);
+
+        JOptionPane.showMessageDialog(this, panel, "Detalles de la Partida", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_ActualizarActionPerformed
 
     /**
