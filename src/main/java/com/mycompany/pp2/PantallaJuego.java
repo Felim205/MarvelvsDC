@@ -62,26 +62,27 @@ public class PantallaJuego extends PantallaMadre {
      */
     private void actualizarPantalla() {
         if (personaje1 != null && personaje2 != null && ciudad != null) {
-            // Asignar nombres de los personajes
             NombreIzq.setText(personaje1.getPseudonimo());
             NombreDer.setText(personaje2.getPseudonimo());
 
-            // Asignar nombres de los jugadores
             JugadorIzq.setText(jugador1.getUserName());
             JugadorDer.setText(jugador2.getUserName());
 
-            // Mostrar nombre de la ciudad con guiones
             Stage.setText("-" + ciudad.getCuidad() + "-");
 
-            // Verificar y redimensionar imágenes
             setImagenEscalada(ImgIzq, personaje1.getFotografia());
             setImagenEscalada(ImgDer, personaje2.getFotografia());
 
-            // Configurar la barra de vida
-            ProgressBarIzq.setValue(personaje1.calcularVida());
-            ProgressBarDer.setValue(personaje2.calcularVida());
-        } else {
-            JOptionPane.showMessageDialog(this, "Error al cargar los datos de la partida.", "Error", JOptionPane.ERROR_MESSAGE);
+            int vida1 = personaje1.getVidaActual();
+            int vida2 = personaje2.getVidaActual();
+
+            System.out.println("📊 ACTUALIZANDO Barra de Vida: " + personaje1.getPseudonimo() + " (" + vida1 + ") - " + personaje2.getPseudonimo() + " (" + vida2 + ")");
+
+            ProgressBarIzq.setValue(vida1);
+            ProgressBarIzq.repaint();
+
+            ProgressBarDer.setValue(vida2);
+            ProgressBarDer.repaint();
         }
     }
     
@@ -102,14 +103,27 @@ public class PantallaJuego extends PantallaMadre {
      * Verifica si el juego ha terminado y muestra el ganador.
      */
     private void verificarFinDeJuego() {
-        if (personaje1 instanceof Heroe && ((Heroe) personaje1).getVida() <= 0) {
-            JOptionPane.showMessageDialog(this, personaje2.getPseudonimo() + " ha ganado!");
-            this.dispose();
-        } else if (personaje2 instanceof Villano && ((Villano) personaje2).getVida() <= 0) {
-            JOptionPane.showMessageDialog(this, personaje1.getPseudonimo() + " ha ganado!");
-            this.dispose();
+        // 🔥 Aseguramos que la UI refleje la última actualización antes de verificar
+        actualizarPantalla();
+
+        int vida1 = personaje1.getVidaActual(); 
+        int vida2 = personaje2.getVidaActual(); 
+
+        System.out.println("🛑 Verificando fin del juego...");
+        System.out.println("Vida de " + personaje1.getPseudonimo() + ": " + vida1);
+        System.out.println("Vida de " + personaje2.getPseudonimo() + ": " + vida2);
+
+        if (vida1 <= 0) {
+            JOptionPane.showMessageDialog(this, personaje2.getPseudonimo() + " ha ganado! 🏆", "Fin del juego", JOptionPane.INFORMATION_MESSAGE);
+            System.out.println("🎉 " + personaje2.getPseudonimo() + " GANA LA PARTIDA! 🎉");
+            this.dispose(); // 🔥 Cierra la ventana de juego
+        } else if (vida2 <= 0) {
+            JOptionPane.showMessageDialog(this, personaje1.getPseudonimo() + " ha ganado! 🏆", "Fin del juego", JOptionPane.INFORMATION_MESSAGE);
+            System.out.println("🎉 " + personaje1.getPseudonimo() + " GANA LA PARTIDA! 🎉");
+            this.dispose(); // 🔥 Cierra la ventana de juego
         }
     }
+
     
     /**
      * Personaliza la apariencia de la pantalla.
@@ -204,24 +218,20 @@ public class PantallaJuego extends PantallaMadre {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnIzqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnIzqActionPerformed
-        if (personaje2 instanceof Heroe) {
-            ((Heroe) personaje2).recibirAtaque(personaje1);
-            ProgressBarDer.setValue(((Heroe) personaje2).getVidaPorcentaje());
-        } else if (personaje2 instanceof Villano) {
-            ((Villano) personaje2).recibirAtaque(personaje1);
-            ProgressBarDer.setValue(((Villano) personaje2).getVidaPorcentaje());
-        }
+        System.out.println("➡ Botón IZQUIERDO presionado. " + personaje1.getPseudonimo() + " ataca a " + personaje2.getPseudonimo());
+
+        personaje2.recibirAtaque(personaje1);
+
+        actualizarPantalla(); // 🔥 IMPORTANTE: Llamar a actualizarPantalla() después del ataque
         verificarFinDeJuego();
     }//GEN-LAST:event_BtnIzqActionPerformed
 
     private void BtnDerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDerActionPerformed
-        if (personaje1 instanceof Heroe) {
-            ((Heroe) personaje1).recibirAtaque(personaje2);
-            ProgressBarIzq.setValue(((Heroe) personaje1).getVidaPorcentaje());
-        } else if (personaje1 instanceof Villano) {
-            ((Villano) personaje1).recibirAtaque(personaje2);
-            ProgressBarIzq.setValue(((Villano) personaje1).getVidaPorcentaje());
-        }
+        System.out.println("➡ Botón DERECHO presionado. " + personaje2.getPseudonimo() + " ataca a " + personaje1.getPseudonimo());
+
+        personaje1.recibirAtaque(personaje2);
+
+        actualizarPantalla(); // 🔥 IMPORTANTE: Llamar a actualizarPantalla() después del ataque
         verificarFinDeJuego();
     }//GEN-LAST:event_BtnDerActionPerformed
 
