@@ -13,7 +13,7 @@ public class Ciudad implements Serializable { // Se agrega Serializable
     // Atributos privados
     private String pais;
     private String estado;
-    private String cuidad;
+    private String ciudad;
     private TipoEscenario escenario;
     
     // Enumeración para TipoEscenario    
@@ -41,10 +41,10 @@ public class Ciudad implements Serializable { // Se agrega Serializable
     }
 
     // Constructor con parámetros
-    public Ciudad(String pais, String estado, String cuidad, TipoEscenario escenario) {
+    public Ciudad(String pais, String estado, String ciudad, TipoEscenario escenario) {
         this.pais = pais;
         this.estado = estado;
-        this.cuidad = cuidad;
+        this.ciudad = ciudad;
         this.escenario = escenario;
     }
 
@@ -65,12 +65,12 @@ public class Ciudad implements Serializable { // Se agrega Serializable
         this.estado = estado;
     }
 
-    public String getCuidad() {
-        return cuidad;
+    public String getCiudad() {
+        return ciudad;
     }
 
-    public void setCuidad(String cuidad) {
-        this.cuidad = cuidad;
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
     }
 
     public TipoEscenario getEscenario() {
@@ -84,10 +84,10 @@ public class Ciudad implements Serializable { // Se agrega Serializable
     // Método toString
     @Override
     public String toString() {
-        return "Cuidad{" +
+        return "Ciudad{" +
                 "pais='" + pais + '\'' +
                 ", estado='" + estado + '\'' +
-                ", cuidad='" + cuidad + '\'' +
+                ", Ciudad='" + ciudad + '\'' +
                 ", escenario=" + escenario +
                 '}';
     }
