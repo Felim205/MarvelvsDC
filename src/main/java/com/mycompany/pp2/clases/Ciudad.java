@@ -3,10 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.pp2.clases;
+import java.io.Serializable;
 
 
 
-public class Ciudad {
+public class Ciudad implements Serializable { // Se agrega Serializable
+    private static final long serialVersionUID = 1L; // Se recomienda agregar este identificador único
 
     // Atributos privados
     private String pais;

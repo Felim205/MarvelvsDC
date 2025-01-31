@@ -4,11 +4,11 @@
  */
 package com.mycompany.pp2.clases;
 
-
-
 import java.util.Date;
+import java.io.Serializable;
 
-public class Persona {
+public class Persona implements Serializable { // Se agrega Serializable
+    private static final long serialVersionUID = 1L;
     // Atributos protegidos
     protected String nombre;
     protected Date fechaNacimiento;

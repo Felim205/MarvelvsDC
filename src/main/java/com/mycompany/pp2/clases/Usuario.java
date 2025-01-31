@@ -4,9 +4,12 @@
  */
 package com.mycompany.pp2.clases;
 
+import java.io.Serializable;
 
 
-public class Usuario {
+
+public class Usuario implements Serializable { // Se agrega Serializable
+    private static final long serialVersionUID = 1L;
     // Atributos privados
     private String nombre;
     private String apellidos;
