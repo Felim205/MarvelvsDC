@@ -1,5 +1,8 @@
 package com.mycompany.pp2;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 /**
@@ -132,7 +135,25 @@ public class PantallaMadreMenues extends PantallaMadre {
         String patronFecha = "^\\d{2}/\\d{2}/\\d{4}$";
         return fecha != null && Pattern.matches(patronFecha, fecha);
     }
-
+    
+    protected boolean validarLongitudTexto(String texto, int max) {
+        return texto != null && texto.length() <= max;
+    }
+    protected boolean validarFechaNacimiento(String fecha) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            sdf.setLenient(false);
+            try {
+                Date fechaIngresada = sdf.parse(fecha);
+                return fechaIngresada.before(new Date());
+            } catch (ParseException e) {
+                return false;
+            }
+        }  
+    
+    protected boolean validarPais(String pais) {
+        return pais != null && pais.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+");
+    }
+    
     /**
      * Valida que una dirección contenga los campos requeridos.
      */

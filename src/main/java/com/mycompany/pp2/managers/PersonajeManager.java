@@ -186,7 +186,7 @@ public class PersonajeManager {
 
             listaPersonajes.add(new Personaje(
                 "Johnny Storm", calcularFechaNacimiento(1986, 5, 19), "Estados Unidos", "/images/humantorch.png",
-                Personaje.TipoPersonaje.HEROE, "Antorcha Humana", "/images/human_torch.png",
+                Personaje.TipoPersonaje.HEROE, "Antorcha Humana", "/images/humantorch.png",
                 Personaje.TipoOrigen.META_HUMANO, Personaje.TipoFranquicia.MARVEL,
                 80, 90, 35, 85
             ));
