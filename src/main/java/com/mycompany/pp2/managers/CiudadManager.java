@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.pp2.managers;
 
 import com.mycompany.pp2.clases.Ciudad;
@@ -10,13 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author gabob
+ * Clase de gestión para ciudades
  */
-
 public class CiudadManager {
     private static final String ARCHIVO_CIUDADES = "ciudades.dat";
     private static final List<Ciudad> listaCiudades = new ArrayList<>();
+
+    static {
+        inicializarCiudades(); // Asegura que siempre haya datos al cargar la clase
+    }
 
     public static void agregarCiudad(Ciudad ciudad) {
         listaCiudades.add(ciudad);
@@ -24,6 +22,9 @@ public class CiudadManager {
     }
 
     public static List<Ciudad> getListaCiudades() {
+        if (listaCiudades.isEmpty()) {
+            cargarCiudades(); // Asegura que siempre haya datos
+        }
         return listaCiudades;
     }
 
@@ -59,11 +60,12 @@ public class CiudadManager {
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
+        } else {
+            inicializarCiudades(); // Si no hay archivo, inicializar
         }
     }
 
     public static void inicializarCiudades() {
-        cargarCiudades();
         if (listaCiudades.isEmpty()) { // Solo inicializa si la lista está vacía
             listaCiudades.add(new Ciudad("Estados Unidos", "New York", "New York", Ciudad.TipoEscenario.CIUDAD));
             listaCiudades.add(new Ciudad("Latveria", "Doomstadt", "Reino de Latveria", Ciudad.TipoEscenario.MONTAÑA));
