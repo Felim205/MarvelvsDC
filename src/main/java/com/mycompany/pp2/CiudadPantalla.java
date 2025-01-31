@@ -41,7 +41,7 @@ public class CiudadPantalla extends PantallaMadreMenues {
         model.setRowCount(0); // Limpiar la tabla visualmente, pero mantener los datos en CiudadManager
         
         for (Ciudad ciudad : CiudadManager.getListaCiudades()) {
-            model.addRow(new Object[]{ciudad.getCuidad(), ciudad.getPais(), ciudad.getEstado(), ciudad.getEscenario().getNombre()});
+            model.addRow(new Object[]{ciudad.getCiudad(), ciudad.getPais(), ciudad.getEstado(), ciudad.getEscenario().getNombre()});
         }
     }
     
@@ -166,7 +166,6 @@ public class CiudadPantalla extends PantallaMadreMenues {
             comboPais.addItem(pais.getNombre());
         }
 
-        // Agregar escenarios con nombres formateados
         for (TipoEscenario escenario : TipoEscenario.values()) {
             comboEscenario.addItem(escenario.getNombre());
         }
@@ -188,6 +187,24 @@ public class CiudadPantalla extends PantallaMadreMenues {
             String pais = (String) comboPais.getSelectedItem();
             String estado = txtEstado.getText().trim();
             String escenarioNombre = (String) comboEscenario.getSelectedItem();
+
+            // Validaciones
+            if (nombre.isEmpty() || estado.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacíos.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (nombre.length() > 70) {
+                JOptionPane.showMessageDialog(this, "El nombre de la ciudad no puede superar los 70 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            for (Ciudad ciudad : CiudadManager.getListaCiudades()) {
+                if (ciudad.getCiudad().equalsIgnoreCase(nombre)) {
+                    JOptionPane.showMessageDialog(this, "Ya existe una ciudad con este nombre.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
 
             // Convertir el nombre seleccionado a su respectivo enum
             TipoEscenario escenario = null;
@@ -216,7 +233,7 @@ public class CiudadPantalla extends PantallaMadreMenues {
 
         Ciudad ciudadSeleccionada = CiudadManager.getListaCiudades().get(filaSeleccionada);
 
-        JTextField txtNombreCiudad = new JTextField(ciudadSeleccionada.getCuidad(), 15);
+        JTextField txtNombreCiudad = new JTextField(ciudadSeleccionada.getCiudad(), 15);
         JComboBox<String> comboPais = new JComboBox<>();
         JTextField txtEstado = new JTextField(ciudadSeleccionada.getEstado(), 15);
         JComboBox<String> comboEscenario = new JComboBox<>();
@@ -245,7 +262,7 @@ public class CiudadPantalla extends PantallaMadreMenues {
         int result = JOptionPane.showConfirmDialog(this, panel, "Editar Ciudad", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
-            ciudadSeleccionada.setCuidad(txtNombreCiudad.getText().trim());
+            ciudadSeleccionada.setCiudad(txtNombreCiudad.getText().trim());
             ciudadSeleccionada.setPais((String) comboPais.getSelectedItem());
             ciudadSeleccionada.setEstado(txtEstado.getText().trim());
 
