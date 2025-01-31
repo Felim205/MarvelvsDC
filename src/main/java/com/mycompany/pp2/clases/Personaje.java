@@ -6,6 +6,7 @@ package com.mycompany.pp2.clases;
 
 
 
+import com.mycompany.pp2.managers.SonidoManager;
 import java.util.Random;
 import java.util.Date;
 
@@ -211,8 +212,10 @@ public class Personaje extends Persona {
             setVidaActual(vidaActual - daño); // ✅ Usamos `setVidaActual()` en vez de calcular manualmente
 
             System.out.println("🩸 Nueva vida de " + getPseudonimo() + ": " + getVidaActual());
+            SonidoManager.playSound("ataque.wav");
         } else {
             System.out.println(getPseudonimo() + " esquivó el ataque!");
+            SonidoManager.playSound("Miss.wav");
         }
     }
     

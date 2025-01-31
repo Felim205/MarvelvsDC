@@ -8,6 +8,7 @@ import com.mycompany.pp2.clases.Personaje;
 import com.mycompany.pp2.clases.Villano;
 import com.mycompany.pp2.clases.Antiheroe;
 import com.mycompany.pp2.clases.Usuario;
+import com.mycompany.pp2.managers.SonidoManager;
 import java.awt.Color;
 import java.awt.Image;
 import java.util.Date;
@@ -27,6 +28,8 @@ public class PantallaJuego extends PantallaMadre {
     private Ciudad ciudad;
     private Date fechaInicio;
     private int duracion;
+    
+    private boolean turnoJugador1 = true; // ✅ Comienza el turno del jugador 1
 
     /**
      * Constructor de PantallaJuego.
@@ -55,6 +58,7 @@ public class PantallaJuego extends PantallaMadre {
         imageStretcher(Vs);
         
         actualizarPantalla();
+        actualizarTurno();
     }
 
     /**
@@ -85,6 +89,19 @@ public class PantallaJuego extends PantallaMadre {
             ProgressBarDer.repaint();
         }
     }
+
+     /**
+     * Actualiza el turno y habilita/deshabilita los botones de ataque.
+     */
+    private void actualizarTurno() {
+        if (turnoJugador1) {
+            BtnIzq.setEnabled(true);  // 🔥 Habilitar botón del jugador 1
+            BtnDer.setEnabled(false); // ❌ Deshabilitar botón del jugador 2
+        } else {
+            BtnIzq.setEnabled(false); // ❌ Deshabilitar botón del jugador 1
+            BtnDer.setEnabled(true);  // 🔥 Habilitar botón del jugador 2
+        }
+    }
     
     /**
     * Escala y asigna una imagen a un JLabel.
@@ -103,7 +120,6 @@ public class PantallaJuego extends PantallaMadre {
      * Verifica si el juego ha terminado y muestra el ganador.
      */
     private void verificarFinDeJuego() {
-        // 🔥 Aseguramos que la UI refleje la última actualización antes de verificar
         actualizarPantalla();
 
         int vida1 = personaje1.getVidaActual(); 
@@ -114,13 +130,19 @@ public class PantallaJuego extends PantallaMadre {
         System.out.println("Vida de " + personaje2.getPseudonimo() + ": " + vida2);
 
         if (vida1 <= 0) {
+            SonidoManager.playSound("victoria.wav");
             JOptionPane.showMessageDialog(this, personaje2.getPseudonimo() + " ha ganado! 🏆", "Fin del juego", JOptionPane.INFORMATION_MESSAGE);
             System.out.println("🎉 " + personaje2.getPseudonimo() + " GANA LA PARTIDA! 🎉");
-            this.dispose(); // 🔥 Cierra la ventana de juego
+            this.dispose(); 
         } else if (vida2 <= 0) {
+            SonidoManager.playSound("victoria.wav");
             JOptionPane.showMessageDialog(this, personaje1.getPseudonimo() + " ha ganado! 🏆", "Fin del juego", JOptionPane.INFORMATION_MESSAGE);
             System.out.println("🎉 " + personaje1.getPseudonimo() + " GANA LA PARTIDA! 🎉");
-            this.dispose(); // 🔥 Cierra la ventana de juego
+            this.dispose(); 
+        } else {
+            // 🔄 Cambiar el turno SOLO si nadie ha ganado
+            turnoJugador1 = !turnoJugador1;
+            actualizarTurno(); // ✅ Actualizar botones
         }
     }
 
@@ -218,21 +240,23 @@ public class PantallaJuego extends PantallaMadre {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnIzqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnIzqActionPerformed
+        if (!turnoJugador1) return; // ✅ Evita ataques fuera de turno
+
         System.out.println("➡ Botón IZQUIERDO presionado. " + personaje1.getPseudonimo() + " ataca a " + personaje2.getPseudonimo());
 
         personaje2.recibirAtaque(personaje1);
-
-        actualizarPantalla(); // 🔥 IMPORTANTE: Llamar a actualizarPantalla() después del ataque
-        verificarFinDeJuego();
+        actualizarPantalla(); 
+        verificarFinDeJuego(); 
     }//GEN-LAST:event_BtnIzqActionPerformed
 
     private void BtnDerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDerActionPerformed
+        if (turnoJugador1) return; // ✅ Evita ataques fuera de turno
+
         System.out.println("➡ Botón DERECHO presionado. " + personaje2.getPseudonimo() + " ataca a " + personaje1.getPseudonimo());
 
         personaje1.recibirAtaque(personaje2);
-
-        actualizarPantalla(); // 🔥 IMPORTANTE: Llamar a actualizarPantalla() después del ataque
-        verificarFinDeJuego();
+        actualizarPantalla(); 
+        verificarFinDeJuego(); 
     }//GEN-LAST:event_BtnDerActionPerformed
 
     /**
