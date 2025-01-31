@@ -341,7 +341,7 @@ public class PantallaJuego extends PantallaMadre {
         System.out.println("Turno " + turnosTotales);
         historialPartida.append("Turno ").append(turnosTotales).append("\n");
         
-        personaje1.recibirAtaque(personaje1, historialPartida);
+        personaje1.recibirAtaque(personaje2, historialPartida);
 
         ataquesJugador2++;
         System.out.println("Ataques realizados - " + jugador2.getUserName() + ": " + ataquesJugador2);
