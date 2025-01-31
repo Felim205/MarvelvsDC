@@ -10,7 +10,25 @@ import com.mycompany.pp2.managers.SonidoManager;
 import java.util.Random;
 import java.util.Date;
 
+/**
+ * Representa un personaje en el sistema, heredando de la clase {@link Persona}.
+ * Incluye atributos como fuerza, velocidad, inteligencia y recursos económicos,
+ * así como métodos para calcular su poder total y manejar interacciones de combate.
+ *
+ * <h2>Ejemplo de uso:</h2>
+ * <pre>
+ * {@code
+ * Personaje spiderman = new Personaje("Peter Parker", new Date(), "Estados Unidos", "/images/spiderman.png",
+ *     Personaje.TipoPersonaje.HEROE, "Spider-Man", "/images/spiderman.png",
+ *     Personaje.TipoOrigen.META_HUMANO, Personaje.TipoFranquicia.MARVEL,
+ *     90, 85, 85, 5);
+ * }
+ * </pre>
+ * 
+ * @author gabob
+ */
 public class Personaje extends Persona {
+    
     // Atributos específicos de Personaje
     protected TipoPersonaje personaje;
     protected String pseudonimo;
@@ -26,7 +44,10 @@ public class Personaje extends Persona {
     private int vidaActual = 100;
     
     
-    // Enumeración para Tipo de Personaje
+    // Enumeraciones de tipos de personaje, origen y franquicia
+    /**
+     * Tipos de personaje disponibles.
+     */
     public enum TipoPersonaje {
         HEROE("Héroe"),
         ANTIHEROE("Anti-Héroe"),
@@ -44,6 +65,9 @@ public class Personaje extends Persona {
     }
 
      // Enumeración para el Origen del Personaje
+    /**
+     * Tipos de origen disponibles.
+     */
     public enum TipoOrigen {
         ALIENIGENA("Alienígena"),
         MUTANTE("Mutante"),
@@ -62,6 +86,9 @@ public class Personaje extends Persona {
 
 
     // Enumeración para la Franquicia
+    /**
+     * Tipos de franquicia disponibles.
+     */
     public enum TipoFranquicia {
         MARVEL("Marvel"),
         DC("DC"),
@@ -78,12 +105,30 @@ public class Personaje extends Persona {
         }
     }
     
-    // Constructor vacío
+    /**
+     * Constructor vacío que inicializa un personaje sin valores definidos.
+     */
     public Personaje() {
         super();
     }
 
-    // Constructor con parámetros
+    /**
+     * Constructor que inicializa un personaje con valores específicos.
+     *
+     * @param nombre Nombre real del personaje.
+     * @param fechaNacimiento Fecha de nacimiento del personaje.
+     * @param paisResidencia País de residencia del personaje.
+     * @param foto Ruta de la imagen del personaje.
+     * @param personaje Tipo de personaje (Héroe, Villano o Anti-héroe).
+     * @param pseudonimo Nombre alternativo del personaje.
+     * @param fotografia Ruta de la imagen del personaje con su identidad secreta.
+     * @param origen Tipo de origen del personaje.
+     * @param franquicia Franquicia a la que pertenece el personaje.
+     * @param fuerza Nivel de fuerza del personaje.
+     * @param velocidad Nivel de velocidad del personaje.
+     * @param inteligencia Nivel de inteligencia del personaje.
+     * @param recursosEconomicos Cantidad de recursos económicos del personaje.
+     */
     public Personaje(String nombre, Date fechaNacimiento, String paisResidencia, String foto,
                      TipoPersonaje personaje, String pseudonimo, String fotografia, TipoOrigen origen,
                      TipoFranquicia franquicia, double fuerza, double velocidad, double inteligencia,
@@ -100,31 +145,57 @@ public class Personaje extends Persona {
         this.recursosEconomicos = recursosEconomicos;
     }
 
-    // Getters y setters
+    /**
+     * Calcula el poder total del personaje basado en sus atributos principales.
+     * 
+     * @return Un valor entero representando el poder total.
+     */
     public TipoPersonaje getPersonaje() {
         return personaje;
     }
 
+    /**
+     * Calcula el daño de ataque del personaje en función de su fuerza y recursos económicos.
+     * 
+     * @return Cantidad de daño infligido en un ataque.
+     */
     public void setPersonaje(TipoPersonaje personaje) {
         this.personaje = personaje;
     }
 
+    /**
+     * Determina si el personaje logra esquivar un ataque basándose en su inteligencia y velocidad.
+     * 
+     * @return {@code true} si el personaje esquiva el ataque, {@code false} en caso contrario.
+     */
     public String getPseudonimo() {
         return pseudonimo;
     }
 
+    /**
+     * Obtiene la vida actual del personaje.
+     * 
+     * @return Vida actual del personaje (0 - 100).
+     */
     public void setPseudonimo(String pseudonimo) {
         this.pseudonimo = pseudonimo;
     }
 
+    /**
+     * Establece la vida actual del personaje, asegurando que no sea menor a 0 ni mayor a 100.
+     * 
+     * @param nuevaVida Nueva cantidad de vida.
+     */
     public String getFotografia() {
         return fotografia;
     }
 
+ 
     public void setFotografia(String fotografia) {
         this.fotografia = fotografia;
     }
 
+    
     public TipoOrigen getOrigen() {
         return origen;
     }
@@ -204,6 +275,13 @@ public class Personaje extends Persona {
         }
     }
 
+     /**
+     * Maneja la recepción de un ataque por parte del personaje.
+     * Si el ataque no es esquivado, se reduce la vida del personaje.
+     *
+     * @param atacante Personaje que realiza el ataque.
+     * @param historialPartida Historial donde se almacena la información del combate.
+     */
     public void recibirAtaque(Personaje atacante, StringBuilder historialPartida) {
         System.out.println(getPseudonimo() + " recibió un ataque de " + atacante.getPseudonimo());
         historialPartida.append(getPseudonimo())
@@ -237,7 +315,11 @@ public class Personaje extends Persona {
         }
     }
 
-    // Método toString
+    /**
+     * Devuelve una representación en cadena del personaje.
+     *
+     * @return Representación en texto del personaje y sus atributos.
+     */
     @Override
     public String toString() {
         return "Personaje{" +

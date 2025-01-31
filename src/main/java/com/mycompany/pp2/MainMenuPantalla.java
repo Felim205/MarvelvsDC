@@ -1,6 +1,5 @@
 package com.mycompany.pp2;
 
-import com.mycompany.pp2.clases.JuegoMarvelvsDC;
 import com.mycompany.pp2.managers.CiudadManager;
 import com.mycompany.pp2.managers.PersonajeManager;
 import com.mycompany.pp2.managers.UsuarioManager;

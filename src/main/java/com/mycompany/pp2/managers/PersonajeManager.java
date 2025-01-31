@@ -12,26 +12,52 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * Clase de gestión para la administración de personajes en el sistema.
+ * Permite agregar, eliminar, editar y cargar personajes desde un archivo de almacenamiento persistente.
+ *
+ * <p>Esta clase maneja la persistencia de los personajes utilizando serialización en archivos.</p>
+ * 
+ * <h2>Ejemplo de uso:</h2>
+ * <pre>
+ * {@code
+ * List<Personaje> personajes = PersonajeManager.getListaPersonajes();
+ * PersonajeManager.agregarPersonaje(new Personaje("Nuevo Personaje", ...));
+ * }
+ * </pre>
  *
  * @author gabob
  */
-
-/**
- * Clase de gestión de personajes
- */
 public class PersonajeManager {
+    
+    /**
+     * Nombre del archivo donde se almacenan los personajes.
+     */
     private static final String ARCHIVO_PERSONAJES = "personajes.dat";
+    
+    /**
+     * Carga los personajes al iniciar la clase.
+     */
     private static final List<Personaje> listaPersonajes = new ArrayList<>();
 
     static {
         inicializarPersonajes(); // Asegura que siempre haya datos cargados al iniciar
     }
 
+    /**
+     * Agrega un nuevo personaje a la lista y guarda los cambios en el archivo de almacenamiento.
+     *
+     * @param personaje El personaje que se desea agregar.
+     */
     public static void agregarPersonaje(Personaje personaje) {
         listaPersonajes.add(personaje);
         guardarPersonajes();
     }
 
+    /**
+     * Retorna la lista actual de personajes almacenados en el sistema.
+     *
+     * @return Lista de personajes registrados.
+     */
     public static List<Personaje> getListaPersonajes() {
         if (listaPersonajes.isEmpty()) {
             cargarPersonajes(); // Asegura que siempre haya datos
@@ -39,6 +65,11 @@ public class PersonajeManager {
         return listaPersonajes;
     }
 
+    /**
+     * Elimina un personaje de la lista según su índice y guarda los cambios en el archivo.
+     *
+     * @param indice Índice del personaje a eliminar en la lista.
+     */
     public static void eliminarPersonaje(int indice) {
         if (indice >= 0 && indice < listaPersonajes.size()) {
             listaPersonajes.remove(indice);
@@ -46,6 +77,12 @@ public class PersonajeManager {
         }
     }
 
+    /**
+     * Edita un personaje existente en la lista y guarda los cambios en el archivo de almacenamiento.
+     *
+     * @param indice Índice del personaje a editar.
+     * @param personaje Nuevo objeto Personaje con la información actualizada.
+     */
     public static void editarPersonaje(int indice, Personaje personaje) {
         if (indice >= 0 && indice < listaPersonajes.size()) {
             listaPersonajes.set(indice, personaje);
@@ -53,6 +90,9 @@ public class PersonajeManager {
         }
     }
 
+    /**
+     * Guarda la lista de personajes en el archivo de almacenamiento persistente.
+     */
     private static void guardarPersonajes() {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(ARCHIVO_PERSONAJES))) {
             out.writeObject(listaPersonajes);
@@ -61,6 +101,10 @@ public class PersonajeManager {
         }
     }
 
+    /**
+     * Carga los personajes desde el archivo de almacenamiento y los almacena en la lista.
+     * Si el archivo no existe o está vacío, no se realiza ninguna acción.
+     */
     private static void cargarPersonajes() {
         File archivo = new File(ARCHIVO_PERSONAJES);
         if (archivo.exists() && archivo.length() > 0) { 
@@ -74,12 +118,24 @@ public class PersonajeManager {
         }
     }
 
+    /**
+     * Calcula la fecha de nacimiento de un personaje a partir de su año, mes y día.
+     *
+     * @param año Año de nacimiento.
+     * @param mes Mes de nacimiento (1-12).
+     * @param dia Día de nacimiento (1-31).
+     * @return Objeto Date representando la fecha de nacimiento.
+     */
     private static Date calcularFechaNacimiento(int año, int mes, int dia) {
         Calendar calendario = Calendar.getInstance();
         calendario.set(año, mes - 1, dia);
         return calendario.getTime();
     }
 
+    /**
+     * Inicializa la lista de personajes cargando los datos desde el archivo.
+     * Si la lista está vacía tras la carga, se añaden personajes predeterminados y se guardan en el archivo.
+     */
     public static void inicializarPersonajes() {
         cargarPersonajes();
         if (listaPersonajes.isEmpty()) { // Solo inicializa si la lista está vacía
