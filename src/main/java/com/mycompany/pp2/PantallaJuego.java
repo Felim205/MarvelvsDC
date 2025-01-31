@@ -29,8 +29,10 @@ public class PantallaJuego extends PantallaMadre {
     private Date fechaInicio;
     private int duracion;
     
-    private boolean turnoJugador1 = true; // ✅ Comienza el turno del jugador 1
+    private boolean turnoJugador1 = true;
 
+    private int ataquesJugador1 = 0;
+    private int ataquesJugador2 = 0;
     /**
      * Constructor de PantallaJuego.
      * @param jugador1 Usuario del primer jugador
@@ -130,7 +132,7 @@ public class PantallaJuego extends PantallaMadre {
             SonidoManager.playSound("victoria.wav"); // 🎵 Sonido de victoria
 
             String ganador = (vida1 <= 0) ? personaje2.getPseudonimo() : personaje1.getPseudonimo();
-            System.out.println("🎉 " + ganador + " GANA LA PARTIDA! 🎉");
+            System.out.println(ganador + " GANA LA PARTIDA! ");
 
             // Crear opciones personalizadas
             Object[] opciones = {"Volver a Jugar", "Volver al Menú Principal"};
@@ -272,14 +274,26 @@ public class PantallaJuego extends PantallaMadre {
 
     private void BtnIzqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnIzqActionPerformed
         if (!turnoJugador1) return;
+
         personaje2.recibirAtaque(personaje1);
+
+        ataquesJugador1++; // 📊 Incrementamos el contador de ataques del Jugador 1
+        System.out.println("Ataques realizados - " + jugador1.getUserName() + ": " + ataquesJugador1);
+        System.out.println("---------------------------------------------------------");
+
         actualizarPantalla(); 
-        verificarFinDeJuego(); 
+        verificarFinDeJuego();  
     }//GEN-LAST:event_BtnIzqActionPerformed
 
     private void BtnDerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDerActionPerformed
         if (turnoJugador1) return;
+
         personaje1.recibirAtaque(personaje2);
+
+        ataquesJugador2++; // 📊 Incrementamos el contador de ataques del Jugador 2
+        System.out.println("Ataques realizados - " + jugador2.getUserName() + ": " + ataquesJugador2);
+        System.out.println("---------------------------------------------------------");
+
         actualizarPantalla(); 
         verificarFinDeJuego(); 
     }//GEN-LAST:event_BtnDerActionPerformed

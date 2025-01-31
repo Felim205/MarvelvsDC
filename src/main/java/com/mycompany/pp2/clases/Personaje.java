@@ -213,7 +213,6 @@ public class Personaje extends Persona {
             setVidaActual(vidaActual - daño);
 
             System.out.println("La vida de " + getPseudonimo() + " es : " + getVidaActual());
-            System.out.println(" ");
             System.out.println("-----------------------------------------");
             SonidoManager.playSound("ataque.wav");
         } else {
