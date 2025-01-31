@@ -184,7 +184,7 @@ public class Personaje extends Persona {
     
     public boolean esquivarAtaque() {
         Random random = new Random();
-        double probabilidadEsquivar = (getInteligencia() * getVelocidad()) / 100;
+        double probabilidadEsquivar = ((getInteligencia() * getVelocidad()) / 100)/2;
         double randomValue = random.nextDouble() * 100; // Número entre 0 y 100
         return randomValue <= probabilidadEsquivar;
     }
