@@ -33,6 +33,10 @@ public class PantallaJuego extends PantallaMadre {
 
     private int ataquesJugador1 = 0;
     private int ataquesJugador2 = 0;
+    
+    private int turnosTotales = 0;
+
+    private StringBuilder historialPartida = new StringBuilder();
     /**
      * Constructor de PantallaJuego.
      * @param jugador1 Usuario del primer jugador
@@ -133,7 +137,10 @@ public class PantallaJuego extends PantallaMadre {
 
             String ganador = (vida1 <= 0) ? personaje2.getPseudonimo() : personaje1.getPseudonimo();
             System.out.println(ganador + " GANA LA PARTIDA! ");
+            historialPartida.append("🎉 ").append(personaje2.getPseudonimo()).append(" GANA LA PARTIDA! 🎉\n");
 
+            System.out.println("📝 Historial de la partida:\n" + historialPartida.toString());
+            
             // Crear opciones personalizadas
             Object[] opciones = {"Volver a Jugar", "Volver al Menú Principal"};
             int seleccion = JOptionPane.showOptionDialog(
@@ -274,26 +281,38 @@ public class PantallaJuego extends PantallaMadre {
 
     private void BtnIzqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnIzqActionPerformed
         if (!turnoJugador1) return;
+        turnosTotales++;
+        
+        System.out.println("Turno " + turnosTotales);
+        historialPartida.append("Turno ").append(turnosTotales).append("\n");
+        
+        personaje2.recibirAtaque(personaje1, historialPartida);
 
-        personaje2.recibirAtaque(personaje1);
 
-        ataquesJugador1++; // 📊 Incrementamos el contador de ataques del Jugador 1
+        ataquesJugador1++;
         System.out.println("Ataques realizados - " + jugador1.getUserName() + ": " + ataquesJugador1);
         System.out.println("---------------------------------------------------------");
 
+        historialPartida.append("Ataques realizados - ").append(jugador1.getUserName()).append(": ").append(ataquesJugador1).append("\n");
+        
         actualizarPantalla(); 
         verificarFinDeJuego();  
     }//GEN-LAST:event_BtnIzqActionPerformed
 
     private void BtnDerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDerActionPerformed
         if (turnoJugador1) return;
+        turnosTotales++;
+        
+        System.out.println("Turno " + turnosTotales);
+        historialPartida.append("Turno ").append(turnosTotales).append("\n");
+        
+        personaje2.recibirAtaque(personaje1, historialPartida);
 
-        personaje1.recibirAtaque(personaje2);
-
-        ataquesJugador2++; // 📊 Incrementamos el contador de ataques del Jugador 2
+        ataquesJugador2++;
         System.out.println("Ataques realizados - " + jugador2.getUserName() + ": " + ataquesJugador2);
         System.out.println("---------------------------------------------------------");
-
+        historialPartida.append("Ataques realizados - ").append(jugador1.getUserName()).append(": ").append(ataquesJugador1).append("\n");
+        
         actualizarPantalla(); 
         verificarFinDeJuego(); 
     }//GEN-LAST:event_BtnDerActionPerformed

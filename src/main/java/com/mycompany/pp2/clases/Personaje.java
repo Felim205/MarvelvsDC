@@ -204,25 +204,38 @@ public class Personaje extends Persona {
         }
     }
 
-    public void recibirAtaque(Personaje atacante) {
-        System.out.println(getPseudonimo() + " recibio un ataque de " + atacante.getPseudonimo());
+    public void recibirAtaque(Personaje atacante, StringBuilder historialPartida) {
+        System.out.println(getPseudonimo() + " recibió un ataque de " + atacante.getPseudonimo());
+        historialPartida.append(getPseudonimo())
+                        .append(" recibió un ataque de ")
+                        .append(atacante.getPseudonimo())
+                        .append("\n");
+
         System.out.println(" ");
+        historialPartida.append("\n");
 
         if (!esquivarAtaque()) {
             int daño = (int) atacante.calcularAtaque();
             setVidaActual(vidaActual - daño);
 
             System.out.println("La vida de " + getPseudonimo() + " es : " + getVidaActual());
+            historialPartida.append("La vida de ").append(getPseudonimo()).append(" es : ").append(getVidaActual()).append("\n");
+
             System.out.println("-----------------------------------------");
+            historialPartida.append("-----------------------------------------\n");
+
             SonidoManager.playSound("ataque.wav");
         } else {
-            System.out.println(getPseudonimo() + " esquivo el ataque!");
+            System.out.println("---------------------------------------------------------");
+            System.out.println(getPseudonimo() + " esquivó el ataque!");
+            historialPartida.append(getPseudonimo()).append(" esquivó el ataque!\n");
+
             System.out.println(" ");
+            historialPartida.append("\n");
+
             SonidoManager.playSound("Miss.wav");
         }
     }
-    
-
 
     // Método toString
     @Override
