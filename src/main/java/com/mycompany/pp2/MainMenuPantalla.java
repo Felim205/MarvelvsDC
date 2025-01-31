@@ -45,6 +45,8 @@ public class MainMenuPantalla extends PantallaMadreMenues {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Texto = new javax.swing.JLabel();
+        Imagen = new javax.swing.JLabel();
         Background = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -52,6 +54,15 @@ public class MainMenuPantalla extends PantallaMadreMenues {
         setMinimumSize(new java.awt.Dimension(931, 589));
         setPreferredSize(new java.awt.Dimension(931, 589));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        Texto.setFont(new java.awt.Font("Yu Gothic UI Semibold", 2, 32)); // NOI18N
+        Texto.setForeground(new java.awt.Color(51, 51, 51));
+        Texto.setText("Main Menu");
+        getContentPane().add(Texto, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 80, 180, -1));
+
+        Imagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/MainMenuDecor.png"))); // NOI18N
+        Imagen.setText("jLabel1");
+        getContentPane().add(Imagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 910, 450));
 
         Background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/BgMM.png"))); // NOI18N
         Background.setMaximumSize(new java.awt.Dimension(915, 590));
@@ -100,5 +111,7 @@ public class MainMenuPantalla extends PantallaMadreMenues {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Background;
+    private javax.swing.JLabel Imagen;
+    private javax.swing.JLabel Texto;
     // End of variables declaration//GEN-END:variables
 }
