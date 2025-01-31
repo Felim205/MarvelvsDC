@@ -157,164 +157,127 @@ public class CiudadPantalla extends PantallaMadreMenues {
      * Agregar una nueva ciudad ingresada por el usuario.
      */
     private void AgregarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarBtnActionPerformed
-    JTextField txtNombreCiudad = new JTextField(15);
-    JComboBox<String> comboPais = new JComboBox<>();
-    JTextField txtEstado = new JTextField(15);
-    JComboBox<String> comboEscenario = new JComboBox<>();
+        JTextField txtNombreCiudad = new JTextField(15);
+        JComboBox<String> comboPais = new JComboBox<>();
+        JTextField txtEstado = new JTextField(15);
+        JComboBox<String> comboEscenario = new JComboBox<>();
 
-    for (Pais pais : Pais.values()) {
-        comboPais.addItem(pais.getNombre());
-    }
+        for (Pais pais : Pais.values()) {
+            comboPais.addItem(pais.getNombre());
+        }
 
-    for (TipoEscenario escenario : TipoEscenario.values()) {
-        comboEscenario.addItem(escenario.getNombre());
-    }
+        for (TipoEscenario escenario : TipoEscenario.values()) {
+            comboEscenario.addItem(escenario.getNombre());
+        }
 
-    JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
-    panel.add(new JLabel("Nombre de la Ciudad:"));
-    panel.add(txtNombreCiudad);
-    panel.add(new JLabel("País:"));
-    panel.add(comboPais);
-    panel.add(new JLabel("Estado/Provincia:"));
-    panel.add(txtEstado);
-    panel.add(new JLabel("Escenario:"));
-    panel.add(comboEscenario);
+        JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
+        panel.add(new JLabel("Nombre de la Ciudad:"));
+        panel.add(txtNombreCiudad);
+        panel.add(new JLabel("País:"));
+        panel.add(comboPais);
+        panel.add(new JLabel("Estado/Provincia:"));
+        panel.add(txtEstado);
+        panel.add(new JLabel("Escenario:"));
+        panel.add(comboEscenario);
 
-    boolean datosValidos = false;
-    while (!datosValidos) {
         int result = JOptionPane.showConfirmDialog(this, panel, "Agregar Ciudad", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-        if (result != JOptionPane.OK_OPTION) {
-            return; // Cierra si el usuario cancela
-        }
 
-        String nombre = txtNombreCiudad.getText().trim();
-        String pais = (String) comboPais.getSelectedItem();
-        String estado = txtEstado.getText().trim();
-        String escenarioNombre = (String) comboEscenario.getSelectedItem();
+        if (result == JOptionPane.OK_OPTION) {
+            String nombre = txtNombreCiudad.getText().trim();
+            String pais = (String) comboPais.getSelectedItem();
+            String estado = txtEstado.getText().trim();
+            String escenarioNombre = (String) comboEscenario.getSelectedItem();
 
-        // Validaciones
-        if (nombre.isEmpty() || estado.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacíos.", "Error", JOptionPane.ERROR_MESSAGE);
-            continue;
-        }
-
-        if (nombre.length() > 70) {
-            JOptionPane.showMessageDialog(this, "El nombre de la ciudad no puede superar los 70 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
-            continue;
-        }
-
-        boolean ciudadExiste = CiudadManager.getListaCiudades().stream()
-            .anyMatch(c -> c.getCiudad().equalsIgnoreCase(nombre));
-
-        if (ciudadExiste) {
-            JOptionPane.showMessageDialog(this, "Ya existe una ciudad con este nombre.", "Error", JOptionPane.ERROR_MESSAGE);
-            continue;
-        }
-
-        // Convertir el nombre seleccionado a su respectivo enum
-        TipoEscenario escenario = null;
-        for (TipoEscenario tipo : TipoEscenario.values()) {
-            if (tipo.getNombre().equals(escenarioNombre)) {
-                escenario = tipo;
-                break;
+            // Validaciones
+            if (nombre.isEmpty() || estado.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacíos.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
-        }
 
-        Ciudad nuevaCiudad = new Ciudad(pais, estado, nombre, escenario);
-        CiudadManager.agregarCiudad(nuevaCiudad);
-        poblarLaTablaCiudad();
-        datosValidos = true;
-    }
+            if (nombre.length() > 70) {
+                JOptionPane.showMessageDialog(this, "El nombre de la ciudad no puede superar los 70 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            for (Ciudad ciudad : CiudadManager.getListaCiudades()) {
+                if (ciudad.getCiudad().equalsIgnoreCase(nombre)) {
+                    JOptionPane.showMessageDialog(this, "Ya existe una ciudad con este nombre.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+
+            // Convertir el nombre seleccionado a su respectivo enum
+            TipoEscenario escenario = null;
+            for (TipoEscenario tipo : TipoEscenario.values()) {
+                if (tipo.getNombre().equals(escenarioNombre)) {
+                    escenario = tipo;
+                    break;
+                }
+            }
+
+            Ciudad nuevaCiudad = new Ciudad(pais, estado, nombre, escenario);
+            CiudadManager.agregarCiudad(nuevaCiudad);
+            poblarLaTablaCiudad();
+        }
     }//GEN-LAST:event_AgregarBtnActionPerformed
     
     /**
      * Editar una ciudad seleccionada.
      */
     private void EditarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditarBtnActionPerformed
-    int filaSeleccionada = ListaCiudades.getSelectedRow();
-    if (filaSeleccionada == -1) {
-        JOptionPane.showMessageDialog(this, "Seleccione una ciudad para editar.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
+        int filaSeleccionada = ListaCiudades.getSelectedRow();
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione una fila para editar.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    Ciudad ciudadSeleccionada = CiudadManager.getListaCiudades().get(filaSeleccionada);
+        Ciudad ciudadSeleccionada = CiudadManager.getListaCiudades().get(filaSeleccionada);
 
-    JTextField txtNombreCiudad = new JTextField(ciudadSeleccionada.getCiudad(), 15);
-    JComboBox<String> comboPais = new JComboBox<>();
-    JTextField txtEstado = new JTextField(ciudadSeleccionada.getEstado(), 15);
-    JComboBox<String> comboEscenario = new JComboBox<>();
+        JTextField txtNombreCiudad = new JTextField(ciudadSeleccionada.getCiudad(), 15);
+        JComboBox<String> comboPais = new JComboBox<>();
+        JTextField txtEstado = new JTextField(ciudadSeleccionada.getEstado(), 15);
+        JComboBox<String> comboEscenario = new JComboBox<>();
 
-    for (Pais pais : Pais.values()) {
-        comboPais.addItem(pais.getNombre());
-    }
-    comboPais.setSelectedItem(ciudadSeleccionada.getPais());
+        for (Pais pais : Pais.values()) {
+            comboPais.addItem(pais.getNombre());
+        }
+        comboPais.setSelectedItem(ciudadSeleccionada.getPais());
 
-    for (TipoEscenario escenario : TipoEscenario.values()) {
-        comboEscenario.addItem(escenario.getNombre());
-    }
-    comboEscenario.setSelectedItem(ciudadSeleccionada.getEscenario().getNombre());
+        // Agregar escenarios con nombres formateados
+        for (TipoEscenario escenario : TipoEscenario.values()) {
+            comboEscenario.addItem(escenario.getNombre());
+        }
+        comboEscenario.setSelectedItem(ciudadSeleccionada.getEscenario().getNombre());
 
-    JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
-    panel.add(new JLabel("Nombre de la Ciudad:"));
-    panel.add(txtNombreCiudad);
-    panel.add(new JLabel("País:"));
-    panel.add(comboPais);
-    panel.add(new JLabel("Estado/Provincia:"));
-    panel.add(txtEstado);
-    panel.add(new JLabel("Escenario:"));
-    panel.add(comboEscenario);
+        JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
+        panel.add(new JLabel("Nombre de la Ciudad:"));
+        panel.add(txtNombreCiudad);
+        panel.add(new JLabel("País:"));
+        panel.add(comboPais);
+        panel.add(new JLabel("Estado/Provincia:"));
+        panel.add(txtEstado);
+        panel.add(new JLabel("Escenario:"));
+        panel.add(comboEscenario);
 
-    boolean datosValidos = false;
-    while (!datosValidos) {
         int result = JOptionPane.showConfirmDialog(this, panel, "Editar Ciudad", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-        if (result != JOptionPane.OK_OPTION) {
-            return; // Cierra si el usuario cancela la edición
-        }
 
-        String nuevoNombre = txtNombreCiudad.getText().trim();
-        String nuevoPais = (String) comboPais.getSelectedItem();
-        String nuevoEstado = txtEstado.getText().trim();
-        String escenarioNombre = (String) comboEscenario.getSelectedItem();
+        if (result == JOptionPane.OK_OPTION) {
+            ciudadSeleccionada.setCiudad(txtNombreCiudad.getText().trim());
+            ciudadSeleccionada.setPais((String) comboPais.getSelectedItem());
+            ciudadSeleccionada.setEstado(txtEstado.getText().trim());
 
-        // Validaciones
-        if (nuevoNombre.isEmpty() || nuevoEstado.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Los campos no pueden estar vacíos.", "Error", JOptionPane.ERROR_MESSAGE);
-            continue;
-        }
-
-        if (nuevoNombre.length() > 70) {
-            JOptionPane.showMessageDialog(this, "El nombre de la ciudad no puede superar los 70 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
-            continue;
-        }
-
-        // Verificar si el nombre ya está en uso en otra ciudad
-        boolean ciudadExiste = CiudadManager.getListaCiudades().stream()
-            .anyMatch(c -> !c.equals(ciudadSeleccionada) && c.getCiudad().equalsIgnoreCase(nuevoNombre));
-
-        if (ciudadExiste) {
-            JOptionPane.showMessageDialog(this, "Ya existe otra ciudad con este nombre.", "Error", JOptionPane.ERROR_MESSAGE);
-            continue;
-        }
-
-        // Convertir el nombre seleccionado a su respectivo enum
-        TipoEscenario nuevoEscenario = null;
-        for (TipoEscenario tipo : TipoEscenario.values()) {
-            if (tipo.getNombre().equals(escenarioNombre)) {
-                nuevoEscenario = tipo;
-                break;
+            // Convertir el nombre seleccionado a su respectivo enum
+            String escenarioNombre = (String) comboEscenario.getSelectedItem();
+            for (TipoEscenario tipo : TipoEscenario.values()) {
+                if (tipo.getNombre().equals(escenarioNombre)) {
+                    ciudadSeleccionada.setEscenario(tipo);
+                    break;
+                }
             }
+
+            CiudadManager.editarCiudad(filaSeleccionada, ciudadSeleccionada);
+            poblarLaTablaCiudad();
         }
-
-        // Actualizar la ciudad seleccionada con los nuevos datos
-        ciudadSeleccionada.setCiudad(nuevoNombre);
-        ciudadSeleccionada.setPais(nuevoPais);
-        ciudadSeleccionada.setEstado(nuevoEstado);
-        ciudadSeleccionada.setEscenario(nuevoEscenario);
-
-        CiudadManager.editarCiudad(filaSeleccionada, ciudadSeleccionada);
-        poblarLaTablaCiudad();
-        datosValidos = true;
-    }
     }//GEN-LAST:event_EditarBtnActionPerformed
     
     /**

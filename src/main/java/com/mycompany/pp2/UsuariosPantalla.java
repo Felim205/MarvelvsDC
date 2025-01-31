@@ -157,7 +157,7 @@ public class UsuariosPantalla extends PantallaMadreMenues {
         while (!datosValidos) {
             int result = JOptionPane.showConfirmDialog(this, panel, "Agregar Usuario", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result != JOptionPane.OK_OPTION) {
-                return; // Cierra si el usuario cancela la operación
+                return; // Cierra si se cancela sin borrar datos
             }
 
             String nombre = txtNombre.getText().trim();
@@ -166,27 +166,21 @@ public class UsuariosPantalla extends PantallaMadreMenues {
             String correo = txtCorreo.getText().trim();
             String contraseña = new String(txtContraseña.getPassword());
 
-            // Validaciones básicas
-            if (nombre.isEmpty() || apellidos.isEmpty() || userName.isEmpty() || correo.isEmpty() || contraseña.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+            // Validaciones heredadas
+            if (!validarTexto(nombre, 2, 30) || !validarTexto(apellidos, 2, 30)) {
+                JOptionPane.showMessageDialog(this, "El nombre y apellidos deben tener entre 2 y 30 caracteres y solo contener letras.", "Error", JOptionPane.ERROR_MESSAGE);
                 continue;
             }
-
+            if (!validarCorreo(correo)) {
+                JOptionPane.showMessageDialog(this, "Ingrese un correo válido (ejemplo@dominio.com).", "Error", JOptionPane.ERROR_MESSAGE);
+                continue;
+            }
             if (userName.length() < 5) {
                 JOptionPane.showMessageDialog(this, "El username debe tener al menos 5 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
                 continue;
             }
             if (contraseña.length() < 8) {
                 JOptionPane.showMessageDialog(this, "La contraseña debe tener al menos 8 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
-                continue;
-            }
-
-            // Validar si el usuario o correo ya existen en el sistema
-            boolean usuarioExiste = UsuarioManager.getListaUsuarios().stream()
-                .anyMatch(u -> u.getUserName().equalsIgnoreCase(userName) || u.getCorreo().equalsIgnoreCase(correo));
-
-            if (usuarioExiste) {
-                JOptionPane.showMessageDialog(this, "El username o el correo ya están registrados. Use otros valores.", "Error", JOptionPane.ERROR_MESSAGE);
                 continue;
             }
 
@@ -199,18 +193,10 @@ public class UsuariosPantalla extends PantallaMadreMenues {
     }//GEN-LAST:event_AgregarBtnActionPerformed
 
     private void EditarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditarBtnActionPerformed
-        int filaSeleccionada = ListaUsuarios.getSelectedRow();
-        if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un usuario para editar.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        Usuario usuarioSeleccionado = UsuarioManager.getListaUsuarios().get(filaSeleccionada);
-
-        JTextField txtNombre = new JTextField(usuarioSeleccionado.getNombre(), 15);
-        JTextField txtApellidos = new JTextField(usuarioSeleccionado.getApellidos(), 15);
-        JTextField txtUserName = new JTextField(usuarioSeleccionado.getUserName(), 15);
-        JTextField txtCorreo = new JTextField(usuarioSeleccionado.getCorreo(), 15);
+        JTextField txtNombre = new JTextField(15);
+        JTextField txtApellidos = new JTextField(15);
+        JTextField txtUserName = new JTextField(15);
+        JTextField txtCorreo = new JTextField(15);
         JPasswordField txtContraseña = new JPasswordField(15);
 
         JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
@@ -222,53 +208,48 @@ public class UsuariosPantalla extends PantallaMadreMenues {
         panel.add(txtUserName);
         panel.add(new JLabel("Correo:"));
         panel.add(txtCorreo);
-        panel.add(new JLabel("Nueva Contraseña (Opcional):"));
+        panel.add(new JLabel("Contraseña:"));
         panel.add(txtContraseña);
 
         boolean datosValidos = false;
         while (!datosValidos) {
-            int result = JOptionPane.showConfirmDialog(this, panel, "Editar Usuario", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            int result = JOptionPane.showConfirmDialog(this, panel, "Agregar Usuario", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result != JOptionPane.OK_OPTION) {
-                return; // Cierra si el usuario cancela la operación
+                return; // Cierra si se cancela sin borrar datos
             }
 
             String nombre = txtNombre.getText().trim();
             String apellidos = txtApellidos.getText().trim();
             String userName = txtUserName.getText().trim();
             String correo = txtCorreo.getText().trim();
-            String nuevaContraseña = new String(txtContraseña.getPassword());
+            String contraseña = new String(txtContraseña.getPassword());
 
-            // Validaciones básicas
-            if (nombre.isEmpty() || apellidos.isEmpty() || userName.isEmpty() || correo.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+            // Validaciones heredadas
+            if (nombre.isEmpty() || apellidos.isEmpty() || userName.isEmpty() || correo.isEmpty() || contraseña.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Ningún campo puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
                 continue;
             }
 
-            if (userName.length() < 5) {
-                JOptionPane.showMessageDialog(this, "El username debe tener al menos 5 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
+            if (nombre.length() > 70 || apellidos.length() > 70) {
+                JOptionPane.showMessageDialog(this, "El nombre o apellido no puede superar los 70 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
                 continue;
             }
 
-            // Validar si el nuevo `userName` o `correo` ya existen en otros usuarios
-            boolean usuarioExiste = UsuarioManager.getListaUsuarios().stream()
-                .anyMatch(u -> !u.equals(usuarioSeleccionado) &&
-                               (u.getUserName().equalsIgnoreCase(userName) || u.getCorreo().equalsIgnoreCase(correo)));
-
-            if (usuarioExiste) {
-                JOptionPane.showMessageDialog(this, "El username o el correo ya están registrados por otro usuario.", "Error", JOptionPane.ERROR_MESSAGE);
+            if (!userName.matches("[a-zA-Z0-9]+")) {
+                JOptionPane.showMessageDialog(this, "El username solo puede contener letras y números.", "Error", JOptionPane.ERROR_MESSAGE);
                 continue;
             }
 
-            // Actualizar datos
-            usuarioSeleccionado.setNombre(nombre);
-            usuarioSeleccionado.setApellidos(apellidos);
-            usuarioSeleccionado.setUserName(userName);
-            usuarioSeleccionado.setCorreo(correo);
-            if (!nuevaContraseña.isEmpty()) {
-                usuarioSeleccionado.setContraseña(nuevaContraseña);
+            for (Usuario usuario : UsuarioManager.getListaUsuarios()) {
+                if (usuario.getUserName().equalsIgnoreCase(userName)) {
+                    JOptionPane.showMessageDialog(this, "Ya existe un usuario con este username.", "Error", JOptionPane.ERROR_MESSAGE);
+                    continue;
+                }
             }
 
-            UsuarioManager.editarUsuario(filaSeleccionada, usuarioSeleccionado);
+            // Crear usuario y agregarlo
+            Usuario nuevoUsuario = new Usuario(nombre, apellidos, userName, correo, contraseña);
+            UsuarioManager.agregarUsuario(nuevoUsuario);
             poblarLaTablaUsuarios();
             datosValidos = true;
         }
