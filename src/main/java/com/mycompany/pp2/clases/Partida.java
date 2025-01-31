@@ -163,17 +163,15 @@ public class Partida implements Serializable {
         this.descripcion = descripcion;
     }
 
-
     public void setIdPartida(String idPartida) {
         this.idPartida = idPartida;
     }
 
-    /**
+     /**
      * Devuelve una representación en cadena de la partida con su información relevante.
      *
      * @return Representación en texto de la partida con su ID, fecha, turnos, participantes y ganador.
      */
-    @Override
     public String toString() {
         return "Partida{" +
                 "ID='" + idPartida + '\'' +
